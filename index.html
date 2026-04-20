@@ -1,1371 +1,1876 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SoulSensei — Live Booking System Blueprint</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --ink: #1A1A2E;
-    --paper: #FAFAF7;
-    --warm-white: #F5F3EE;
-    --accent: #D4622B;
-    --accent-light: #F4E0D0;
-    --accent-glow: rgba(212,98,43,0.08);
-    --teal: #2A7B6F;
-    --teal-light: #D6F0EB;
-    --blue: #3466A8;
-    --blue-light: #DEEAF6;
-    --plum: #6B3FA0;
-    --plum-light: #EDE4F7;
-    --red: #C0392B;
-    --red-light: #FADBD8;
-    --gold: #B8860B;
-    --gold-light: #FDF2D0;
-    --gray-100: #F0EEEA;
-    --gray-200: #E2DFD8;
-    --gray-300: #C8C4BB;
-    --gray-500: #8A857C;
-    --gray-700: #4A463F;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
-    --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
-    --shadow-lg: 0 8px 32px rgba(0,0,0,0.08);
-    --radius: 10px;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoulSensei — Live Booking System Blueprint</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1A1A2E;
+      --paper: #FAFAF7;
+      --warm-white: #F5F3EE;
+      --accent: #D4622B;
+      --accent-light: #F4E0D0;
+      --accent-glow: rgba(212, 98, 43, 0.08);
+      --teal: #2A7B6F;
+      --teal-light: #D6F0EB;
+      --blue: #3466A8;
+      --blue-light: #DEEAF6;
+      --plum: #6B3FA0;
+      --plum-light: #EDE4F7;
+      --red: #C0392B;
+      --red-light: #FADBD8;
+      --gold: #B8860B;
+      --gold-light: #FDF2D0;
+      --gray-100: #F0EEEA;
+      --gray-200: #E2DFD8;
+      --gray-300: #C8C4BB;
+      --gray-500: #8A857C;
+      --gray-700: #4A463F;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08);
+      --radius: 10px;
+    }
 
-  * { margin:0; padding:0; box-sizing:border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  body {
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'Source Sans 3', -apple-system, sans-serif;
-    font-size: 15px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Source Sans 3', -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
 
-  /* ─── TOP BAR ─── */
-  .topbar {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(250,250,247,0.85);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--gray-200);
-    padding: 12px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+    /* ─── TOP BAR ─── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 250, 247, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-  .topbar-brand {
-    font-family: 'Instrument Serif', serif;
-    font-size: 20px;
-    color: var(--ink);
-  }
+    .topbar-brand {
+      font-family: 'Instrument Serif', serif;
+      font-size: 20px;
+      color: var(--ink);
+    }
 
-  .topbar-brand span { color: var(--accent); }
+    .topbar-brand span {
+      color: var(--accent);
+    }
 
-  .topbar-badge {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--gray-500);
-    background: var(--gray-100);
-    padding: 4px 12px;
-    border-radius: 20px;
-  }
+    .topbar-badge {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      background: var(--gray-100);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
 
-  /* ─── NAV TABS ─── */
-  .nav-tabs {
-    position: sticky;
-    top: 49px;
-    z-index: 99;
-    background: rgba(250,250,247,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--gray-200);
-    display: flex;
-    gap: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .nav-tabs::-webkit-scrollbar { display: none; }
+    /* ─── NAV TABS ─── */
+    .nav-tabs {
+      position: sticky;
+      top: 49px;
+      z-index: 99;
+      background: rgba(250, 250, 247, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
 
-  .nav-tab {
-    padding: 12px 20px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--gray-500);
-    cursor: pointer;
-    border: none;
-    background: none;
-    white-space: nowrap;
-    border-bottom: 2px solid transparent;
-    transition: all 0.25s ease;
-    font-family: 'Source Sans 3', sans-serif;
-  }
+    .nav-tabs::-webkit-scrollbar {
+      display: none;
+    }
 
-  .nav-tab:hover { color: var(--gray-700); }
-  .nav-tab.active {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
-  }
+    .nav-tab {
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-500);
+      cursor: pointer;
+      border: none;
+      background: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.25s ease;
+      font-family: 'Source Sans 3', sans-serif;
+    }
 
-  /* ─── SECTIONS ─── */
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 24px 80px;
-  }
+    .nav-tab:hover {
+      color: var(--gray-700);
+    }
 
-  .section {
-    padding-top: 48px;
-    margin-bottom: 24px;
-  }
+    .nav-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
 
-  .section-header {
-    margin-bottom: 32px;
-  }
+    /* ─── SECTIONS ─── */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
 
-  .section-number {
-    font-family: 'Geist Mono', monospace;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--accent);
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-  }
+    .section {
+      padding-top: 48px;
+      margin-bottom: 24px;
+    }
 
-  .section-title {
-    font-family: 'Instrument Serif', serif;
-    font-size: clamp(28px, 4vw, 36px);
-    color: var(--ink);
-    line-height: 1.2;
-    margin-bottom: 8px;
-  }
+    .section-header {
+      margin-bottom: 32px;
+    }
 
-  .section-subtitle {
-    font-size: 15px;
-    color: var(--gray-500);
-    max-width: 600px;
-  }
+    .section-number {
+      font-family: 'Geist Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
 
-  /* ─── FLOW STEPS (vertical) ─── */
-  .flow {
-    position: relative;
-    padding-left: 52px;
-  }
+    .section-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(28px, 4vw, 36px);
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
 
-  .flow::before {
-    content: '';
-    position: absolute;
-    left: 19px;
-    top: 8px;
-    bottom: 8px;
-    width: 2px;
-    background: repeating-linear-gradient(
-      to bottom,
-      var(--gray-300) 0px,
-      var(--gray-300) 6px,
-      transparent 6px,
-      transparent 12px
-    );
-  }
+    .section-subtitle {
+      font-size: 15px;
+      color: var(--gray-500);
+      max-width: 600px;
+    }
 
-  .flow-step {
-    position: relative;
-    margin-bottom: 28px;
-    opacity: 0;
-    transform: translateY(16px);
-    animation: stepIn 0.5s ease-out forwards;
-  }
+    /* ─── FLOW STEPS (vertical) ─── */
+    .flow {
+      position: relative;
+      padding-left: 52px;
+    }
 
-  .flow-step:nth-child(1) { animation-delay: 0.05s; }
-  .flow-step:nth-child(2) { animation-delay: 0.1s; }
-  .flow-step:nth-child(3) { animation-delay: 0.15s; }
-  .flow-step:nth-child(4) { animation-delay: 0.2s; }
-  .flow-step:nth-child(5) { animation-delay: 0.25s; }
-  .flow-step:nth-child(6) { animation-delay: 0.3s; }
-  .flow-step:nth-child(7) { animation-delay: 0.35s; }
+    .flow::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: repeating-linear-gradient(to bottom,
+          var(--gray-300) 0px,
+          var(--gray-300) 6px,
+          transparent 6px,
+          transparent 12px);
+    }
 
-  @keyframes stepIn {
-    to { opacity: 1; transform: translateY(0); }
-  }
+    .flow-step {
+      position: relative;
+      margin-bottom: 28px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: stepIn 0.5s ease-out forwards;
+    }
 
-  @keyframes pulseRing {
-    0%, 100% { box-shadow: 0 0 8px rgba(34,197,94,0.3); }
-    50% { box-shadow: 0 0 20px rgba(34,197,94,0.6); }
-  }
+    .flow-step:nth-child(1) {
+      animation-delay: 0.05s;
+    }
 
-  .flow-dot {
-    position: absolute;
-    left: -52px;
-    top: 20px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: 700;
-    color: #fff;
-    box-shadow: var(--shadow-md);
-    z-index: 2;
-  }
+    .flow-step:nth-child(2) {
+      animation-delay: 0.1s;
+    }
 
-  .flow-dot.orange { background: var(--accent); }
-  .flow-dot.teal { background: var(--teal); }
-  .flow-dot.blue { background: var(--blue); }
-  .flow-dot.plum { background: var(--plum); }
-  .flow-dot.red { background: var(--red); }
-  .flow-dot.gold { background: var(--gold); }
+    .flow-step:nth-child(3) {
+      animation-delay: 0.15s;
+    }
 
-  .flow-card {
-    background: #fff;
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius);
-    padding: 24px 28px;
-    box-shadow: var(--shadow-sm);
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
-  }
+    .flow-step:nth-child(4) {
+      animation-delay: 0.2s;
+    }
 
-  .flow-card:hover {
-    box-shadow: var(--shadow-md);
-    border-color: var(--gray-300);
-  }
+    .flow-step:nth-child(5) {
+      animation-delay: 0.25s;
+    }
 
-  .flow-card-label {
-    font-family: 'Geist Mono', monospace;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--gray-500);
-    margin-bottom: 4px;
-  }
+    .flow-step:nth-child(6) {
+      animation-delay: 0.3s;
+    }
 
-  .flow-card-title {
-    font-family: 'Instrument Serif', serif;
-    font-size: 22px;
-    color: var(--ink);
-    margin-bottom: 10px;
-  }
+    .flow-step:nth-child(7) {
+      animation-delay: 0.35s;
+    }
 
-  .flow-card-desc {
-    color: var(--gray-700);
-    margin-bottom: 16px;
-    font-size: 14px;
-    line-height: 1.7;
-  }
+    @keyframes stepIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-  /* Mock UI boxes */
-  .mock-ui {
-    background: var(--ink);
-    color: #E8E8E0;
-    border-radius: 8px;
-    padding: 16px 20px;
-    font-family: 'Geist Mono', monospace;
-    font-size: 13px;
-    line-height: 1.8;
-    margin: 14px 0;
-    position: relative;
-    overflow: hidden;
-  }
+    @keyframes pulseRing {
 
-  .mock-ui::before {
-    content: 'UI PREVIEW';
-    position: absolute;
-    top: 8px;
-    right: 12px;
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    color: rgba(255,255,255,0.2);
-    font-weight: 500;
-  }
+      0%,
+      100% {
+        box-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+      }
 
-  .mock-ui .highlight { color: #6EE7B7; }
-  .mock-ui .gold { color: #FBBF24; }
-  .mock-ui .dim { color: rgba(255,255,255,0.35); }
-  .mock-ui .btn-mock {
-    display: inline-block;
-    background: var(--accent);
-    color: #fff;
-    padding: 4px 16px;
-    border-radius: 6px;
-    font-size: 12px;
-    margin-top: 4px;
-  }
+      50% {
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
+      }
+    }
 
-  /* Tags row */
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 4px;
-  }
+    .flow-dot {
+      position: absolute;
+      left: -52px;
+      top: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      box-shadow: var(--shadow-md);
+      z-index: 2;
+    }
 
-  .tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 600;
-  }
+    .flow-dot.orange {
+      background: var(--accent);
+    }
 
-  .tag.orange { background: var(--accent-light); color: var(--accent); }
-  .tag.teal { background: var(--teal-light); color: var(--teal); }
-  .tag.blue { background: var(--blue-light); color: var(--blue); }
-  .tag.plum { background: var(--plum-light); color: var(--plum); }
-  .tag.red { background: var(--red-light); color: var(--red); }
-  .tag.gold { background: var(--gold-light); color: var(--gold); }
+    .flow-dot.teal {
+      background: var(--teal);
+    }
 
-  /* Connector arrow between flow sections */
-  .flow-connector {
-    text-align: center;
-    padding: 16px 0;
-    color: var(--gray-300);
-    font-size: 20px;
-    letter-spacing: 4px;
-  }
+    .flow-dot.blue {
+      background: var(--blue);
+    }
 
-  /* ─── CALLOUT BOX ─── */
-  .callout {
-    border-radius: var(--radius);
-    padding: 20px 24px;
-    margin: 20px 0;
-    font-size: 14px;
-  }
+    .flow-dot.plum {
+      background: var(--plum);
+    }
 
-  .callout.fire {
-    background: linear-gradient(135deg, #FFF5F0, #FFF0E8);
-    border-left: 4px solid var(--accent);
-  }
+    .flow-dot.red {
+      background: var(--red);
+    }
 
-  .callout.info {
-    background: linear-gradient(135deg, #F0F8FF, #E8F4FD);
-    border-left: 4px solid var(--blue);
-  }
+    .flow-dot.gold {
+      background: var(--gold);
+    }
 
-  .callout.warn {
-    background: linear-gradient(135deg, #FFFBF0, #FFF8E1);
-    border-left: 4px solid var(--gold);
-  }
+    .flow-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
 
-  .callout.success {
-    background: linear-gradient(135deg, #F0FFF4, #E8FFF0);
-    border-left: 4px solid var(--teal);
-  }
+    .flow-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--gray-300);
+    }
 
-  .callout-title {
-    font-weight: 700;
-    margin-bottom: 6px;
-    font-size: 14px;
-  }
+    .flow-card-label {
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-bottom: 4px;
+    }
 
-  .callout p { color: var(--gray-700); line-height: 1.6; }
+    .flow-card-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 22px;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
 
-  /* ─── TABLE ─── */
-  .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 16px 0;
-    font-size: 13px;
-  }
+    .flow-card-desc {
+      color: var(--gray-700);
+      margin-bottom: 16px;
+      font-size: 14px;
+      line-height: 1.7;
+    }
 
-  .data-table th {
-    text-align: left;
-    padding: 10px 14px;
-    background: var(--gray-100);
-    font-weight: 700;
-    font-size: 11px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--gray-500);
-    border-bottom: 2px solid var(--gray-200);
-  }
+    /* Mock UI boxes */
+    .mock-ui {
+      background: var(--ink);
+      color: #E8E8E0;
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-family: 'Geist Mono', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      margin: 14px 0;
+      position: relative;
+      overflow: hidden;
+    }
 
-  .data-table td {
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--gray-100);
-    color: var(--gray-700);
-  }
+    .mock-ui::before {
+      content: 'UI PREVIEW';
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      color: rgba(255, 255, 255, 0.2);
+      font-weight: 500;
+    }
 
-  .data-table tr:hover td { background: var(--accent-glow); }
+    .mock-ui .highlight {
+      color: #6EE7B7;
+    }
 
-  .data-table code {
-    font-family: 'Geist Mono', monospace;
-    font-size: 12px;
-    background: var(--gray-100);
-    padding: 2px 6px;
-    border-radius: 4px;
-  }
+    .mock-ui .gold {
+      color: #FBBF24;
+    }
 
-  /* ─── GRID CARDS ─── */
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 14px;
-    margin: 20px 0;
-  }
+    .mock-ui .dim {
+      color: rgba(255, 255, 255, 0.35);
+    }
 
-  .mini-card {
-    background: #fff;
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius);
-    padding: 20px;
-    transition: all 0.3s ease;
-  }
+    .mock-ui .btn-mock {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: 4px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-top: 4px;
+    }
 
-  .mini-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-  }
+    /* Tags row */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
 
-  .mini-card-icon {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
 
-  .mini-card h4 {
-    font-family: 'Instrument Serif', serif;
-    font-size: 17px;
-    margin-bottom: 6px;
-  }
+    .tag.orange {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
 
-  .mini-card p {
-    font-size: 13px;
-    color: var(--gray-500);
-    line-height: 1.6;
-  }
+    .tag.teal {
+      background: var(--teal-light);
+      color: var(--teal);
+    }
 
-  /* ─── DIVIDER ─── */
-  .divider {
-    border: none;
-    border-top: 1px solid var(--gray-200);
-    margin: 48px 0 0;
-  }
+    .tag.blue {
+      background: var(--blue-light);
+      color: var(--blue);
+    }
 
-  /* ─── SUMMARY BANNER ─── */
-  .summary-banner {
-    background: var(--ink);
-    color: #fff;
-    border-radius: 12px;
-    padding: 36px 32px;
-    margin-top: 32px;
-    position: relative;
-    overflow: hidden;
-  }
+    .tag.plum {
+      background: var(--plum-light);
+      color: var(--plum);
+    }
 
-  .summary-banner::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(212,98,43,0.15), transparent 70%);
-    pointer-events: none;
-  }
+    .tag.red {
+      background: var(--red-light);
+      color: var(--red);
+    }
 
-  .summary-banner h3 {
-    font-family: 'Instrument Serif', serif;
-    font-size: 26px;
-    margin-bottom: 16px;
-    position: relative;
-  }
+    .tag.gold {
+      background: var(--gold-light);
+      color: var(--gold);
+    }
 
-  .summary-steps {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    position: relative;
-  }
+    /* Connector arrow between flow sections */
+    .flow-connector {
+      text-align: center;
+      padding: 16px 0;
+      color: var(--gray-300);
+      font-size: 20px;
+      letter-spacing: 4px;
+    }
 
-  .summary-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.1);
-  }
+    /* ─── CALLOUT BOX ─── */
+    .callout {
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin: 20px 0;
+      font-size: 14px;
+    }
 
-  .summary-arrow {
-    color: rgba(255,255,255,0.25);
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-  }
+    .callout.fire {
+      background: linear-gradient(135deg, #FFF5F0, #FFF0E8);
+      border-left: 4px solid var(--accent);
+    }
 
-  /* DB schema visual */
-  .schema-block {
-    background: var(--ink);
-    border-radius: 8px;
-    padding: 20px 24px;
-    font-family: 'Geist Mono', monospace;
-    font-size: 13px;
-    color: #C8D6E5;
-    line-height: 1.8;
-    margin: 16px 0;
-    overflow-x: auto;
-  }
+    .callout.info {
+      background: linear-gradient(135deg, #F0F8FF, #E8F4FD);
+      border-left: 4px solid var(--blue);
+    }
 
-  .schema-block .table-name { color: #6EE7B7; font-weight: 700; }
-  .schema-block .col-name { color: #93C5FD; }
-  .schema-block .col-type { color: #FCA5A5; }
-  .schema-block .comment { color: rgba(255,255,255,0.25); }
+    .callout.warn {
+      background: linear-gradient(135deg, #FFFBF0, #FFF8E1);
+      border-left: 4px solid var(--gold);
+    }
 
-  @media (max-width: 640px) {
-    .container { padding: 0 16px 60px; }
-    .flow { padding-left: 44px; }
-    .flow-dot { left: -44px; width: 32px; height: 32px; font-size: 13px; }
-    .flow::before { left: 15px; }
-    .flow-card { padding: 18px 20px; }
-    .nav-tab { padding: 10px 14px; font-size: 12px; }
-    .summary-steps { flex-direction: column; }
-    .summary-arrow { transform: rotate(90deg); justify-content: center; }
-  }
-</style>
+    .callout.success {
+      background: linear-gradient(135deg, #F0FFF4, #E8FFF0);
+      border-left: 4px solid var(--teal);
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .callout p {
+      color: var(--gray-700);
+      line-height: 1.6;
+    }
+
+    /* ─── TABLE ─── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--gray-100);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      border-bottom: 2px solid var(--gray-200);
+    }
+
+    .data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--gray-100);
+      color: var(--gray-700);
+    }
+
+    .data-table tr:hover td {
+      background: var(--accent-glow);
+    }
+
+    .data-table code {
+      font-family: 'Geist Mono', monospace;
+      font-size: 12px;
+      background: var(--gray-100);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* ─── GRID CARDS ─── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin: 20px 0;
+    }
+
+    .mini-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .mini-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .mini-card-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .mini-card h4 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    .mini-card p {
+      font-size: 13px;
+      color: var(--gray-500);
+      line-height: 1.6;
+    }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--gray-200);
+      margin: 48px 0 0;
+    }
+
+    /* ─── SUMMARY BANNER ─── */
+    .summary-banner {
+      background: var(--ink);
+      color: #fff;
+      border-radius: 12px;
+      padding: 36px 32px;
+      margin-top: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .summary-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(212, 98, 43, 0.15), transparent 70%);
+      pointer-events: none;
+    }
+
+    .summary-banner h3 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 26px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .summary-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      position: relative;
+    }
+
+    .summary-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .summary-arrow {
+      color: rgba(255, 255, 255, 0.25);
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* DB schema visual */
+    .schema-block {
+      background: var(--ink);
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-family: 'Geist Mono', monospace;
+      font-size: 13px;
+      color: #C8D6E5;
+      line-height: 1.8;
+      margin: 16px 0;
+      overflow-x: auto;
+    }
+
+    .schema-block .table-name {
+      color: #6EE7B7;
+      font-weight: 700;
+    }
+
+    .schema-block .col-name {
+      color: #93C5FD;
+    }
+
+    .schema-block .col-type {
+      color: #FCA5A5;
+    }
+
+    .schema-block .comment {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 0 16px 60px;
+      }
+
+      .flow {
+        padding-left: 44px;
+      }
+
+      .flow-dot {
+        left: -44px;
+        width: 32px;
+        height: 32px;
+        font-size: 13px;
+      }
+
+      .flow::before {
+        left: 15px;
+      }
+
+      .flow-card {
+        padding: 18px 20px;
+      }
+
+      .nav-tab {
+        padding: 10px 14px;
+        font-size: 12px;
+      }
+
+      .summary-steps {
+        flex-direction: column;
+      }
+
+      .summary-arrow {
+        transform: rotate(90deg);
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="topbar">
-  <div class="topbar-brand">Soul<span>Sensei</span></div>
-  <div class="topbar-badge">System Blueprint v1.0</div>
-</div>
+  <div class="topbar">
+    <div class="topbar-brand">Soul<span>Sensei</span></div>
+    <div class="topbar-badge">System Blueprint v1.0</div>
+  </div>
 
-<div class="nav-tabs" id="navTabs">
-  <button class="nav-tab active" onclick="scrollToSection('user-journey')">User Journey</button>
-  <button class="nav-tab" onclick="scrollToSection('slot-logic')">Slot & Locking</button>
-  <button class="nav-tab" onclick="scrollToSection('pricing')">Pricing Model</button>
-  <button class="nav-tab" onclick="scrollToSection('leader-dash')">Leader Dashboard</button>
-  <button class="nav-tab" onclick="scrollToSection('avail-approval')">Availability Approval</button>
-  <button class="nav-tab" onclick="scrollToSection('edge-cases')">Edge Cases</button>
-  <button class="nav-tab" onclick="scrollToSection('db-design')">DB Schema</button>
-  <button class="nav-tab" onclick="scrollToSection('conversion')">Conversion UX</button>
-</div>
+  <div class="nav-tabs" id="navTabs">
+    <button class="nav-tab active" onclick="scrollToSection('user-journey')">User Journey</button>
+    <button class="nav-tab" onclick="scrollToSection('slot-logic')">Slot & Locking</button>
+    <button class="nav-tab" onclick="scrollToSection('leader-dash')">Leader Dashboard</button>
+    <button class="nav-tab" onclick="scrollToSection('avail-approval')">Availability Approval</button>
+    <button class="nav-tab" onclick="scrollToSection('edge-cases')">Edge Cases</button>
+    <button class="nav-tab" onclick="scrollToSection('db-design')">DB Schema</button>
+    <button class="nav-tab" onclick="scrollToSection('conversion')">Conversion UX</button>
+  </div>
 
-<div class="container">
+  <div class="container">
 
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- SECTION 1: USER JOURNEY -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div class="section" id="user-journey">
-    <div class="section-header">
-      <div class="section-number">01 — CORE FLOW</div>
-      <div class="section-title">User Journey: Discovery → Session</div>
-      <div class="section-subtitle">The 7-step path from "I see a leader" to "I'm in a live session." No wallet, no friction — just pay and connect.</div>
-    </div>
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION 1: USER JOURNEY -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="section" id="user-journey">
+      <div class="section-header">
+        <div class="section-number">01 — CORE FLOW</div>
+        <div class="section-title">User Journey: Discovery → Session</div>
+        <div class="section-subtitle">The 7-step path from "I see a leader" to "I'm in a live session." Seamless, no
+          friction — just book and connect.</div>
+      </div>
 
-    <div class="flow">
-      <!-- Step 1 -->
-      <div class="flow-step">
-        <div class="flow-dot orange">1</div>
-        <div class="flow-card">
-          <div class="flow-card-label">STEP 1 — DISCOVERY</div>
-          <div class="flow-card-title">Homepage / 1-on-1 Listing Page</div>
-          <div class="flow-card-desc">User opens the app and sees a feed of leaders. Each leader card has a <strong>profile image with a visual "LIVE" badge</strong> — a pulsing green ring + "LIVE" label on the avatar — so users can instantly spot who's available right now without reading any text. Leaders with live slots are auto-sorted to the top.</div>
+      <div class="flow">
+        <!-- Step 1 -->
+        <div class="flow-step">
+          <div class="flow-dot orange">1</div>
+          <div class="flow-card">
+            <div class="flow-card-label">STEP 1 — DISCOVERY</div>
+            <div class="flow-card-title">Homepage + 1:1 Guidance Listing</div>
+            <div class="flow-card-desc">The new "Live Leaders" feature integrates directly into your existing app
+              layout. Two entry points: <strong>Homepage</strong> (new "Live Now" section above existing content) and
+              <strong>1:1 Guidance tab</strong> (LIVE badges on session cards). Matches your current dark plum theme and
+              card style.</div>
 
-          <!-- Leader Card Mock with LIVE badge -->
-          <div style="background:#141020;border-radius:12px;padding:24px;margin:14px 0;">
-            <div style="font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.2);font-weight:500;text-align:right;margin-bottom:12px;">LEADER CARD — USER APP</div>
+            <!-- ====== MOCK: HOMEPAGE with Live Now section ====== -->
+            <div
+              style="background:#1E0E2E;border-radius:20px;padding:0;margin:14px 0;overflow:hidden;max-width:380px;margin-left:auto;margin-right:auto;font-family:'Source Sans 3',-apple-system,sans-serif;box-shadow:0 8px 40px rgba(0,0,0,0.4);">
 
-            <div style="display:flex;gap:16px;align-items:flex-start;">
-              <!-- Avatar with LIVE ring -->
-              <div style="position:relative;flex-shrink:0;">
-                <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#6B4FCF,#44318D);display:flex;align-items:center;justify-content:center;font-size:28px;border:3px solid #22C55E;box-shadow:0 0 12px rgba(34,197,94,0.4);animation:pulseRing 2s ease-in-out infinite;">
-                  🧑‍🦱
-                </div>
-                <div style="position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);background:#22C55E;color:#fff;font-size:9px;font-weight:800;letter-spacing:1px;padding:2px 8px;border-radius:10px;box-shadow:0 0 8px rgba(34,197,94,0.5);">LIVE</div>
+              <!-- Status Bar -->
+              <div
+                style="display:flex;justify-content:space-between;align-items:center;padding:8px 20px 4px;font-size:11px;color:rgba(255,255,255,0.5);">
+                <span>10:10</span>
+                <span>5G ▁▂▃▅ 🔋 35</span>
               </div>
 
-              <!-- Card Content -->
-              <div style="flex:1;font-family:'Geist Mono',monospace;font-size:13px;color:#E8E8E0;line-height:1.7;">
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
-                  <strong style="font-size:15px;font-family:'Source Sans 3',sans-serif;">Swati Ji</strong>
-                  <span style="font-size:11px;color:#FBBF24;">⭐ 4.8</span>
-                  <span style="font-size:11px;color:rgba(255,255,255,0.3);">(1,200)</span>
+              <!-- App Header -->
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 20px 16px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:16px;">☰</span>
+                  <span style="font-size:18px;font-weight:700;color:#fff;">☸ Hi, Avanish</span>
                 </div>
-                <div style="display:flex;gap:6px;margin:6px 0;">
-                  <span style="background:rgba(107,63,160,0.3);color:#C4B5FD;padding:2px 8px;border-radius:4px;font-size:11px;">🔮 Tarot</span>
-                  <span style="background:rgba(107,63,160,0.3);color:#C4B5FD;padding:2px 8px;border-radius:4px;font-size:11px;">⭐ Astrology</span>
+                <div style="display:flex;gap:14px;color:rgba(255,255,255,0.6);font-size:16px;">
+                  <span>🛒</span><span>👤</span>
                 </div>
-                <div style="color:#22C55E;font-size:12px;margin:6px 0;">🟢 Available Now · Next slot in 2 min</div>
-                <div style="color:rgba(255,255,255,0.5);font-size:12px;margin-bottom:8px;">₹999 / 15 min</div>
-                <div style="display:inline-block;background:#D4622B;color:#fff;padding:6px 20px;border-radius:8px;font-size:12px;font-weight:700;font-family:'Source Sans 3',sans-serif;">Talk Now →</div>
+              </div>
+
+              <!-- NEW: Live Now Section -->
+              <div style="padding:0 16px 16px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div
+                      style="width:8px;height:8px;border-radius:50%;background:#22C55E;animation:pulseRing 2s ease-in-out infinite;">
+                    </div>
+                    <span style="font-size:18px;font-weight:700;color:#fff;">Live Now</span>
+                  </div>
+                  <span style="font-size:12px;color:rgba(255,255,255,0.4);">See all →</span>
+                </div>
+
+                <!-- Live Leader Cards (horizontal scroll mock) -->
+                <div style="display:flex;gap:10px;overflow:hidden;">
+
+                  <!-- Card 1: LIVE -->
+                  <div style="min-width:150px;border-radius:14px;overflow:hidden;position:relative;background:#2A1640;">
+                    <!-- Image area -->
+                    <div
+                      style="height:170px;background:linear-gradient(135deg,#3D1E5C,#5A2D7A);display:flex;align-items:center;justify-content:center;position:relative;">
+                      <span style="font-size:64px;">🧑‍🦱</span>
+                      <!-- LIVE badge on image -->
+                      <div
+                        style="position:absolute;top:8px;left:8px;background:#22C55E;color:#fff;font-size:9px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:4px;display:flex;align-items:center;gap:4px;">
+                        <span
+                          style="width:5px;height:5px;border-radius:50%;background:#fff;display:inline-block;animation:pulseRing 1.5s infinite;"></span>
+                        LIVE
+                      </div>
+                      <!-- Green border glow -->
+                      <div
+                        style="position:absolute;inset:0;border:2px solid #22C55E;border-radius:14px;box-shadow:inset 0 0 20px rgba(34,197,94,0.15);pointer-events:none;">
+                      </div>
+                    </div>
+                    <!-- Card info -->
+                    <div style="padding:10px 10px 12px;">
+                      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:2px;">Heal with Shadow Work
+                      </div>
+                      <div style="font-size:11px;color:rgba(255,255,255,0.5);">Manika Aggarwal</div>
+                      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin:3px 0;">60 min · ₹4,237</div>
+                      <div style="font-size:10px;color:#22C55E;margin-top:4px;">⚡ Talk in 2 min</div>
+                    </div>
+                  </div>
+
+                  <!-- Card 2: LIVE -->
+                  <div style="min-width:150px;border-radius:14px;overflow:hidden;position:relative;background:#2A1640;">
+                    <div
+                      style="height:170px;background:linear-gradient(135deg,#4A1E5C,#6A2D8A);display:flex;align-items:center;justify-content:center;position:relative;">
+                      <span style="font-size:64px;">👩</span>
+                      <div
+                        style="position:absolute;top:8px;left:8px;background:#22C55E;color:#fff;font-size:9px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:4px;display:flex;align-items:center;gap:4px;">
+                        <span
+                          style="width:5px;height:5px;border-radius:50%;background:#fff;display:inline-block;"></span>
+                        LIVE
+                      </div>
+                      <div
+                        style="position:absolute;inset:0;border:2px solid #22C55E;border-radius:14px;box-shadow:inset 0 0 20px rgba(34,197,94,0.15);pointer-events:none;">
+                      </div>
+                    </div>
+                    <div style="padding:10px 10px 12px;">
+                      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:2px;">Psychic Readings</div>
+                      <div style="font-size:11px;color:rgba(255,255,255,0.5);">Maana H Tamhankar</div>
+                      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin:3px 0;">45 min · ₹5,085</div>
+                      <div style="font-size:10px;color:#22C55E;margin-top:4px;">⚡ Available Now</div>
+                    </div>
+                  </div>
+
+                  <!-- Card 3: partial (scroll hint) -->
+                  <div style="min-width:60px;border-radius:14px;overflow:hidden;background:#2A1640;opacity:0.4;">
+                    <div style="height:170px;background:linear-gradient(135deg,#3D1E5C,#5A2D7A);"></div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Existing: Reserved Sessions -->
+              <div style="padding:0 16px 12px;">
+                <div style="display:flex;gap:10px;">
+                  <div
+                    style="flex:1;border-radius:10px;overflow:hidden;position:relative;height:90px;background:linear-gradient(135deg,#3D1E5C,#2A1640);">
+                    <div
+                      style="position:absolute;top:6px;left:6px;background:rgba(255,255,255,0.15);color:#fff;font-size:8px;font-weight:700;letter-spacing:1px;padding:2px 6px;border-radius:3px;">
+                      RESERVED</div>
+                    <div style="position:absolute;bottom:6px;left:8px;">
+                      <div style="font-size:10px;font-weight:700;color:#fff;">Restore Energy With Pranayam</div>
+                      <div style="font-size:9px;color:rgba(255,255,255,0.4);">Apr 21, 7:30 AM</div>
+                    </div>
+                  </div>
+                  <div
+                    style="flex:1;border-radius:10px;overflow:hidden;position:relative;height:90px;background:linear-gradient(135deg,#2A1640,#1E0E2E);">
+                    <div
+                      style="position:absolute;top:6px;left:6px;background:rgba(255,255,255,0.15);color:#fff;font-size:8px;font-weight:700;letter-spacing:1px;padding:2px 6px;border-radius:3px;">
+                      RESERVED</div>
+                    <div style="position:absolute;bottom:6px;left:8px;">
+                      <div style="font-size:10px;font-weight:700;color:#fff;">Daily Meditation for Calm...</div>
+                      <div style="font-size:9px;color:rgba(255,255,255,0.4);">Apr 22, 8:00 AM</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Top Categories -->
+              <div style="padding:12px 16px;">
+                <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:10px;">Top Categories on SoulSensei
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+                  <div
+                    style="height:56px;border-radius:8px;background:linear-gradient(135deg,#5A2D7A,#3D1E5C);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;text-align:center;padding:4px;letter-spacing:0.5px;">
+                    1-ON-1<br>GUIDANCE</div>
+                  <div
+                    style="height:56px;border-radius:8px;background:linear-gradient(135deg,#3D6B8E,#2A4A6A);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;text-align:center;padding:4px;letter-spacing:0.5px;">
+                    WOMB<br>HEALING</div>
+                  <div
+                    style="height:56px;border-radius:8px;background:linear-gradient(135deg,#6B3FA0,#4A2D7A);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;text-align:center;padding:4px;letter-spacing:0.5px;">
+                    ANCESTRAL<br>HEALING</div>
+                </div>
+              </div>
+
+              <!-- Bottom Nav -->
+              <div
+                style="display:flex;justify-content:space-around;align-items:center;padding:10px 0;border-top:1px solid rgba(255,255,255,0.08);background:#1A0A28;">
+                <div style="text-align:center;">
+                  <div style="font-size:16px;">🏠</div>
+                  <div style="font-size:9px;color:#fff;font-weight:600;">Home</div>
+                </div>
+                <div style="text-align:center;opacity:0.4;">
+                  <div style="font-size:9px;font-weight:700;color:#fff;margin-bottom:1px;">GROUP</div>
+                  <div style="font-size:9px;color:#fff;">Workshops</div>
+                </div>
+                <div style="text-align:center;opacity:0.4;">
+                  <div style="font-size:14px;font-weight:900;color:#fff;">1:1</div>
+                  <div style="font-size:9px;color:#fff;">Guidance</div>
+                </div>
+                <div style="text-align:center;opacity:0.4;">
+                  <div style="font-size:16px;">💬</div>
+                  <div style="font-size:9px;color:#fff;">My Sessions</div>
+                </div>
               </div>
             </div>
 
-            <!-- Divider -->
-            <div style="border-top:1px solid rgba(255,255,255,0.06);margin:18px 0 14px;"></div>
+            <div
+              style="text-align:center;font-size:11px;color:var(--gray-500);letter-spacing:1px;font-weight:600;margin:20px 0 8px;">
+              ↕ HOMEPAGE MOCK ↑ &nbsp;&nbsp;·&nbsp;&nbsp; ↓ 1:1 GUIDANCE LISTING ↕</div>
 
-            <!-- Offline leader comparison -->
-            <div style="display:flex;gap:16px;align-items:flex-start;opacity:0.45;">
-              <div style="position:relative;flex-shrink:0;">
-                <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#555,#333);display:flex;align-items:center;justify-content:center;font-size:28px;border:3px solid #555;">
-                  🧑
+            <!-- ====== MOCK: 1:1 GUIDANCE PAGE ====== -->
+            <div
+              style="background:#1E0E2E;border-radius:20px;padding:0;margin:14px 0;overflow:hidden;max-width:380px;margin-left:auto;margin-right:auto;font-family:'Source Sans 3',-apple-system,sans-serif;box-shadow:0 8px 40px rgba(0,0,0,0.4);">
+
+              <!-- Header -->
+              <div style="padding:12px 20px 0;display:flex;justify-content:space-between;align-items:center;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:16px;">☰</span>
+                  <span style="font-size:16px;font-weight:700;color:#fff;">☸ SoulSensei</span>
+                </div>
+                <div style="display:flex;gap:14px;color:rgba(255,255,255,0.6);font-size:14px;">
+                  <span>↗</span><span>🛒</span><span>👤</span>
                 </div>
               </div>
-              <div style="flex:1;font-family:'Geist Mono',monospace;font-size:13px;color:#E8E8E0;line-height:1.7;">
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
-                  <strong style="font-size:15px;font-family:'Source Sans 3',sans-serif;">Ravi Guruji</strong>
-                  <span style="font-size:11px;color:#FBBF24;">⭐ 4.6</span>
+
+              <!-- Page Title -->
+              <div
+                style="padding:20px 20px 12px;background:linear-gradient(180deg,#2A1640 0%,#1E0E2E 100%);text-align:center;">
+                <div style="font-size:24px;font-weight:800;color:#fff;margin-bottom:6px;">Personal Sessions</div>
+                <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.5;max-width:280px;margin:0 auto;">
+                  Connect with spiritual guides to lighten your heart, find peace, and reclaim your path.</div>
+              </div>
+
+              <!-- Category Chips -->
+              <div style="display:flex;gap:8px;padding:8px 16px 16px;overflow:hidden;">
+                <span
+                  style="background:rgba(255,255,255,0.1);color:#fff;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;">Energy
+                  Work</span>
+                <span
+                  style="background:rgba(255,255,255,0.1);color:#fff;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;">Angel
+                  Guidance</span>
+                <span
+                  style="background:rgba(255,255,255,0.1);color:#fff;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;opacity:0.5;">Medit...</span>
+              </div>
+
+              <!-- Session Cards Grid -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 16px;">
+
+                <!-- Card 1: LIVE leader -->
+                <div style="border-radius:14px;overflow:hidden;position:relative;background:#2A1640;">
+                  <div
+                    style="height:160px;background:linear-gradient(135deg,#3D1E5C,#5A2D7A);display:flex;align-items:center;justify-content:center;position:relative;">
+                    <span style="font-size:56px;">🧑‍🦱</span>
+                    <!-- 1-on-1 SESSION tag -->
+                    <div
+                      style="position:absolute;top:8px;left:8px;background:rgba(255,255,255,0.15);color:#fff;font-size:8px;font-weight:700;letter-spacing:0.5px;padding:3px 8px;border-radius:4px;">
+                      1-on-1 SESSION</div>
+                    <!-- LIVE badge overlay -->
+                    <div
+                      style="position:absolute;top:8px;right:8px;background:#22C55E;color:#fff;font-size:8px;font-weight:800;letter-spacing:1px;padding:3px 8px;border-radius:4px;display:flex;align-items:center;gap:3px;box-shadow:0 0 10px rgba(34,197,94,0.4);">
+                      <span style="width:5px;height:5px;border-radius:50%;background:#fff;display:inline-block;"></span>
+                      LIVE
+                    </div>
+                    <!-- Green border glow -->
+                    <div
+                      style="position:absolute;inset:0;border:2px solid #22C55E;border-radius:14px;box-shadow:inset 0 0 20px rgba(34,197,94,0.1);pointer-events:none;">
+                    </div>
+                    <!-- Title on image -->
+                    <div style="position:absolute;bottom:8px;left:10px;right:10px;">
+                      <div
+                        style="font-size:14px;font-weight:800;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.6);line-height:1.2;">
+                        Heal with Shadow Work</div>
+                    </div>
+                  </div>
+                  <div style="padding:8px 10px 10px;text-align:center;">
+                    <div style="font-size:11px;color:rgba(255,255,255,0.6);">Manika Aggarwal</div>
+                    <div style="font-size:11px;color:rgba(255,255,255,0.4);">60 min · ₹4,237</div>
+                    <div
+                      style="margin-top:6px;background:#22C55E;color:#fff;padding:5px 0;border-radius:6px;font-size:11px;font-weight:700;">
+                      ⚡ Talk Now</div>
+                  </div>
                 </div>
-                <div style="display:flex;gap:6px;margin:6px 0;">
-                  <span style="background:rgba(80,80,80,0.3);color:#999;padding:2px 8px;border-radius:4px;font-size:11px;">🧘 Meditation</span>
+
+                <!-- Card 2: LIVE leader -->
+                <div style="border-radius:14px;overflow:hidden;position:relative;background:#2A1640;">
+                  <div
+                    style="height:160px;background:linear-gradient(135deg,#4A1E5C,#6A2D8A);display:flex;align-items:center;justify-content:center;position:relative;">
+                    <span style="font-size:56px;">👩</span>
+                    <div
+                      style="position:absolute;top:8px;left:8px;background:rgba(255,255,255,0.15);color:#fff;font-size:8px;font-weight:700;letter-spacing:0.5px;padding:3px 8px;border-radius:4px;">
+                      1-on-1 SESSION</div>
+                    <div
+                      style="position:absolute;top:8px;right:8px;background:#22C55E;color:#fff;font-size:8px;font-weight:800;letter-spacing:1px;padding:3px 8px;border-radius:4px;display:flex;align-items:center;gap:3px;box-shadow:0 0 10px rgba(34,197,94,0.4);">
+                      <span style="width:5px;height:5px;border-radius:50%;background:#fff;display:inline-block;"></span>
+                      LIVE
+                    </div>
+                    <div
+                      style="position:absolute;inset:0;border:2px solid #22C55E;border-radius:14px;box-shadow:inset 0 0 20px rgba(34,197,94,0.1);pointer-events:none;">
+                    </div>
+                    <div style="position:absolute;bottom:8px;left:10px;right:10px;">
+                      <div
+                        style="font-size:14px;font-weight:800;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.6);line-height:1.2;">
+                        Psychic Readings</div>
+                    </div>
+                  </div>
+                  <div style="padding:8px 10px 10px;text-align:center;">
+                    <div style="font-size:11px;color:rgba(255,255,255,0.6);">Maana H Tamhankar</div>
+                    <div style="font-size:11px;color:rgba(255,255,255,0.4);">45 min · ₹5,085</div>
+                    <div
+                      style="margin-top:6px;background:#22C55E;color:#fff;padding:5px 0;border-radius:6px;font-size:11px;font-weight:700;">
+                      ⚡ Talk Now</div>
+                  </div>
                 </div>
-                <div style="color:#999;font-size:12px;margin:6px 0;">⏱ Next available: Tomorrow 10 AM</div>
-                <div style="color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:8px;">₹799 / 15 min</div>
-                <div style="display:inline-block;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.4);padding:6px 20px;border-radius:8px;font-size:12px;font-weight:700;font-family:'Source Sans 3',sans-serif;">Book Later →</div>
+
+                <!-- Card 3: NOT live (normal card) -->
+                <div style="border-radius:14px;overflow:hidden;position:relative;background:#2A1640;">
+                  <div
+                    style="height:160px;background:linear-gradient(135deg,#2A1640,#3D1E5C);display:flex;align-items:center;justify-content:center;position:relative;">
+                    <span style="font-size:56px;">👩‍🦳</span>
+                    <div
+                      style="position:absolute;top:8px;left:8px;background:rgba(255,255,255,0.15);color:#fff;font-size:8px;font-weight:700;letter-spacing:0.5px;padding:3px 8px;border-radius:4px;">
+                      1-on-1 SESSION</div>
+                    <div style="position:absolute;bottom:8px;left:10px;right:10px;">
+                      <div
+                        style="font-size:14px;font-weight:800;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.6);line-height:1.2;">
+                        Heal Your Gut With Reiki</div>
+                    </div>
+                  </div>
+                  <div style="padding:8px 10px 10px;text-align:center;">
+                    <div style="font-size:11px;color:rgba(255,255,255,0.6);">Poonam Dhandania</div>
+                    <div style="font-size:11px;color:rgba(255,255,255,0.4);">Apr 26, 6:00 PM · ₹770</div>
+                  </div>
+                </div>
+
+                <!-- Card 4: NOT live (normal card) -->
+                <div style="border-radius:14px;overflow:hidden;position:relative;background:#2A1640;">
+                  <div
+                    style="height:160px;background:linear-gradient(135deg,#1E0E2E,#2A1640);display:flex;align-items:center;justify-content:center;position:relative;">
+                    <span style="font-size:56px;">🧑‍💼</span>
+                    <div
+                      style="position:absolute;top:8px;left:8px;background:rgba(255,255,255,0.15);color:#fff;font-size:8px;font-weight:700;letter-spacing:0.5px;padding:3px 8px;border-radius:4px;">
+                      1-on-1 SESSION</div>
+                    <div style="position:absolute;bottom:8px;left:10px;right:10px;">
+                      <div
+                        style="font-size:14px;font-weight:800;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.6);line-height:1.2;">
+                        Break the Cycle of Karma</div>
+                    </div>
+                  </div>
+                  <div style="padding:8px 10px 10px;text-align:center;">
+                    <div style="font-size:11px;color:rgba(255,255,255,0.6);">Prateek Bajaj</div>
+                    <div style="font-size:11px;color:rgba(255,255,255,0.4);">Apr 27, 11:00 AM · ₹770</div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Bottom Nav -->
+              <div
+                style="display:flex;justify-content:space-around;align-items:center;padding:10px 0;border-top:1px solid rgba(255,255,255,0.08);background:#1A0A28;">
+                <div style="text-align:center;opacity:0.4;">
+                  <div style="font-size:16px;">🏠</div>
+                  <div style="font-size:9px;color:#fff;">Home</div>
+                </div>
+                <div style="text-align:center;opacity:0.4;">
+                  <div style="font-size:9px;font-weight:700;color:#fff;margin-bottom:1px;">GROUP</div>
+                  <div style="font-size:9px;color:#fff;">Workshops</div>
+                </div>
+                <div style="text-align:center;">
+                  <div style="font-size:14px;font-weight:900;color:#fff;">1:1</div>
+                  <div style="font-size:9px;color:#fff;font-weight:600;">Guidance</div>
+                </div>
+                <div style="text-align:center;opacity:0.4;">
+                  <div style="font-size:16px;">💬</div>
+                  <div style="font-size:9px;color:#fff;">My Sessions</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="callout fire">
-            <div class="callout-title">🔥 Visual Cues on Leader Image (Key UX Decision)</div>
-            <p>The <strong>green pulsing ring + "LIVE" badge</strong> on the avatar is the primary indicator — users can scan the listing and instantly know who's available without reading text. Three visual states:</p>
-            <p style="margin-top:8px;">
-              <strong style="color:#22C55E;">● Green ring + LIVE badge</strong> → Available right now, slots open<br>
-              <strong style="color:#FBBF24;">● Yellow ring + "Soon" badge</strong> → Next slot in 10–30 min<br>
-              <strong style="color:#888;">● Gray ring, no badge</strong> → Offline, show "Next available: [date/time]"
-            </p>
-          </div>
+            <!-- Design notes -->
+            <div class="callout fire">
+              <div class="callout-title">🔥 How LIVE integrates into your current UI</div>
+              <p>No redesign needed — just 3 additions to your existing screens:</p>
+              <p style="margin-top:8px;">
+                <strong>1. Homepage:</strong> New "🟢 Live Now" horizontal scroll section above your existing Reserved
+                cards. Shows only leaders who are online right now.<br><br>
+                <strong>2. 1:1 Guidance page:</strong> Cards for live leaders get a green <strong>"LIVE" badge</strong>
+                (top-right) + green border glow + green "⚡ Talk Now" button replacing the price row. Non-live cards stay
+                exactly as they are.<br><br>
+                <strong>3. Sorting:</strong> Live leaders automatically float to the top of the listing. Non-live
+                leaders show their next available date/time as usual.
+              </p>
+            </div>
 
-          <div class="tags">
-            <span class="tag teal">🟢 LIVE badge on avatar</span>
-            <span class="tag teal">💚 Pulsing green ring</span>
-            <span class="tag orange">🔮 Domain tags via slug</span>
-            <span class="tag blue">⏱ "Next slot in X min"</span>
-            <span class="tag gold">🟡 "Available Soon" state</span>
-            <span class="tag plum">📌 Live leaders sorted to top</span>
-          </div>
-        </div>
-      </div>
+            <div class="callout info">
+              <div class="callout-title">🎨 Design Specs (for your dev team)</div>
+              <p>
+                <strong>LIVE badge:</strong> Background <code>#22C55E</code>, white text, 8px font, top-right of card
+                image<br>
+                <strong>Green border:</strong> <code>2px solid #22C55E</code> with
+                <code>box-shadow: inset 0 0 20px rgba(34,197,94,0.1)</code><br>
+                <strong>Talk Now button:</strong> Full-width green CTA, replaces the static price on live cards<br>
+                <strong>Pulse dot:</strong> 5px white circle inside LIVE badge with CSS pulse animation<br>
+                <strong>All other styles:</strong> Match your existing dark plum theme (#1E0E2E, #2A1640, #3D1E5C)
+              </p>
+            </div>
 
-      <!-- Step 2 -->
-      <div class="flow-step">
-        <div class="flow-dot teal">2</div>
-        <div class="flow-card">
-          <div class="flow-card-label">STEP 2 — SLOT SELECTION</div>
-          <div class="flow-card-title">Choose Your Time</div>
-          <div class="flow-card-desc">After tapping "Talk Now", a bottom sheet slides up with slot options. Even for instant sessions, slots are created internally to prevent double-booking.</div>
-          <div class="mock-ui">
-            <strong>Choose a time slot:</strong><br><br>
-            <span class="highlight">⚡ Now (Instant)</span> &nbsp; <span class="dim">← recommended</span><br>
-            ⏱ In 10 minutes &nbsp; <span class="dim">7:40 PM</span><br>
-            ⏱ In 30 minutes &nbsp; <span class="dim">8:00 PM</span><br><br>
-            <span class="dim">Duration: 15 min</span>
-          </div>
-          <div class="callout info">
-            <div class="callout-title">💡 Why slots for "instant" sessions?</div>
-            <p>Even instant sessions need a 2–3 minute buffer for payment processing and leader notification. Internal slots prevent conflicts when multiple users try to book the same leader simultaneously.</p>
+            <div class="tags">
+              <span class="tag teal">🟢 LIVE badge on card image</span>
+              <span class="tag teal">💚 Green border glow</span>
+              <span class="tag orange">⚡ "Talk Now" CTA</span>
+              <span class="tag blue">📌 Live leaders auto-sort top</span>
+              <span class="tag gold">🏠 Homepage "Live Now" section</span>
+              <span class="tag plum">1:1 Guidance page integration</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Step 3 -->
-      <div class="flow-step">
-        <div class="flow-dot plum">3</div>
-        <div class="flow-card">
-          <div class="flow-card-label">STEP 3 — SLOT LOCKING 🔥</div>
-          <div class="flow-card-title">Reserve & Countdown</div>
-          <div class="flow-card-desc">The moment user selects a slot, it's locked server-side for 5 minutes. A countdown timer creates urgency. If payment isn't completed in time, the slot auto-releases back to the pool.</div>
-          <div class="mock-ui">
-            🔒 <strong>Slot Reserved!</strong><br><br>
-            <span class="gold">⏳ This slot is held for you — 04:32</span><br><br>
-            <span class="dim">Complete payment to confirm.</span><br>
-            <span class="dim">Slot auto-releases if not booked.</span>
-          </div>
-          <div class="callout fire">
-            <div class="callout-title">🔥 Critical Implementation Note</div>
-            <p>Slot lock must be server-side with a TTL (time-to-live). Use Redis or DB-level row locking. Never rely on client-side timers alone — they can be manipulated or lost on app kill.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 4 -->
-      <div class="flow-step">
-        <div class="flow-dot blue">4</div>
-        <div class="flow-card">
-          <div class="flow-card-label">STEP 4 — PAYMENT</div>
-          <div class="flow-card-title">Pay & Confirm (No Wallet)</div>
-          <div class="flow-card-desc">Direct one-time payment via Razorpay/Stripe. No wallet top-up, no credits — the user pays the exact session amount. UPI, cards, and net banking supported.</div>
-          <div class="mock-ui">
-            <strong>Booking Summary</strong><br>
-            <span class="dim">─────────────────────────────</span><br>
-            🔮 15-min Tarot Session<br>
-            👤 Swati Ji<br>
-            ⏰ 7:30 PM Today<br>
-            <span class="dim">─────────────────────────────</span><br>
-            <strong>Total: <span class="gold">₹999</span></strong><br><br>
-            <span class="btn-mock">Pay & Confirm →</span>
-          </div>
-          <div class="tags">
-            <span class="tag blue">💳 Razorpay / Stripe</span>
-            <span class="tag teal">📱 UPI supported</span>
-            <span class="tag plum">🔒 PCI compliant</span>
+        <!-- Step 2 -->
+        <div class="flow-step">
+          <div class="flow-dot teal">2</div>
+          <div class="flow-card">
+            <div class="flow-card-label">STEP 2 — SLOT SELECTION</div>
+            <div class="flow-card-title">Choose Your Time</div>
+            <div class="flow-card-desc">After tapping "Talk Now", a bottom sheet slides up with slot options. Even for
+              instant sessions, slots are created internally to prevent double-booking.</div>
+            <div class="mock-ui">
+              <strong>Choose a time slot:</strong><br><br>
+              <span class="highlight">⚡ Now (Instant)</span> &nbsp; <span class="dim">← recommended</span><br>
+              ⏱ In 10 minutes &nbsp; <span class="dim">7:40 PM</span><br>
+              ⏱ In 30 minutes &nbsp; <span class="dim">8:00 PM</span><br><br>
+              <span class="dim">Duration: 15 min</span>
+            </div>
+            <div class="callout info">
+              <div class="callout-title">💡 Why slots for "instant" sessions?</div>
+              <p>Even instant sessions need a 2–3 minute buffer for payment processing and leader notification. Internal
+                slots prevent conflicts when multiple users try to book the same leader simultaneously.</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Step 5 -->
-      <div class="flow-step">
-        <div class="flow-dot teal">5</div>
-        <div class="flow-card">
-          <div class="flow-card-label">STEP 5 — CONFIRMATION</div>
-          <div class="flow-card-title">Booking Confirmed ✅</div>
-          <div class="flow-card-desc">Payment success triggers: slot status → "booked", leader gets notified (push + WhatsApp), user sees confirmation with a "Join Session" button that activates at session time.</div>
-          <div class="mock-ui">
-            <span class="highlight">✅ Booking Confirmed!</span><br><br>
-            Your session starts in <strong>5 minutes</strong><br>
-            A link has been sent to your WhatsApp.<br><br>
-            <span class="btn-mock">Join Session →</span>
-          </div>
-          <div class="tags">
-            <span class="tag teal">📲 Push notification</span>
-            <span class="tag teal">💬 WhatsApp confirmation</span>
-            <span class="tag blue">📧 Email receipt</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 6 -->
-      <div class="flow-step">
-        <div class="flow-dot gold">6</div>
-        <div class="flow-card">
-          <div class="flow-card-label">STEP 6 — REMINDER</div>
-          <div class="flow-card-title">Pre-Session Nudge</div>
-          <div class="flow-card-desc">If the session is scheduled (not instant), the user gets a reminder 5 minutes before via push + WhatsApp. The "Join Session" button pulses green when the leader is ready.</div>
-          <div class="tags">
-            <span class="tag gold">🔔 5-min reminder push</span>
-            <span class="tag gold">💬 WhatsApp nudge</span>
-            <span class="tag teal">🟢 Leader ready indicator</span>
+        <!-- Step 3 -->
+        <div class="flow-step">
+          <div class="flow-dot plum">3</div>
+          <div class="flow-card">
+            <div class="flow-card-label">STEP 3 — SLOT LOCKING 🔥</div>
+            <div class="flow-card-title">Reserve & Countdown</div>
+            <div class="flow-card-desc">The moment user selects a slot, it's locked server-side for 5 minutes. A
+              countdown timer creates urgency. If payment isn't completed in time, the slot auto-releases back to the
+              pool.</div>
+            <div class="mock-ui">
+              🔒 <strong>Slot Reserved!</strong><br><br>
+              <span class="gold">⏳ This slot is held for you — 04:32</span><br><br>
+              <span class="dim">Complete payment to confirm.</span><br>
+              <span class="dim">Slot auto-releases if not booked.</span>
+            </div>
+            <div class="callout fire">
+              <div class="callout-title">🔥 Critical Implementation Note</div>
+              <p>Slot lock must be server-side with a TTL (time-to-live). Use Redis or DB-level row locking. Never rely
+                on client-side timers alone — they can be manipulated or lost on app kill.</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Step 7 -->
-      <div class="flow-step">
-        <div class="flow-dot orange">7</div>
-        <div class="flow-card">
-          <div class="flow-card-label">STEP 7 — LIVE SESSION</div>
-          <div class="flow-card-title">Join & Connect</div>
-          <div class="flow-card-desc">User taps "Join Session" → enters the video/audio call. Clean, distraction-free UI. Session timer runs. At the end, user is prompted to rate and can rebook the same leader.</div>
-          <div class="tags">
-            <span class="tag orange">📹 WebRTC / Agora</span>
-            <span class="tag blue">⏱ Session timer</span>
-            <span class="tag plum">⭐ Post-session rating</span>
-            <span class="tag teal">🔁 Rebook CTA</span>
+        <!-- Step 4 -->
+        <div class="flow-step">
+          <div class="flow-dot blue">4</div>
+          <div class="flow-card">
+            <div class="flow-card-label">STEP 4 — CONFIRM BOOKING</div>
+            <div class="flow-card-title">Review & Confirm</div>
+            <div class="flow-card-desc">User reviews the booking summary — session type, leader name, time, and duration
+              — then confirms. Seamless one-tap checkout flow.</div>
+            <div class="mock-ui">
+              <strong>Booking Summary</strong><br>
+              <span class="dim">─────────────────────────────</span><br>
+              🔮 15-min Tarot Session<br>
+              👤 Swati Ji<br>
+              ⏰ 7:30 PM Today<br>
+              <span class="dim">─────────────────────────────</span><br><br>
+              <span class="btn-mock">Confirm Booking →</span>
+            </div>
+            <div class="tags">
+              <span class="tag blue">📋 Session summary</span>
+              <span class="tag teal">✅ One-tap confirm</span>
+              <span class="tag plum">🔒 Secure checkout</span>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <hr class="divider">
-
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- SECTION 2: SLOT LOGIC -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div class="section" id="slot-logic">
-    <div class="section-header">
-      <div class="section-number">02 — BACKEND LOGIC</div>
-      <div class="section-title">Availability & Slot Locking</div>
-      <div class="section-subtitle">The engine that prevents double-bookings and keeps everything in sync.</div>
-    </div>
-
-    <div class="card-grid">
-      <div class="mini-card">
-        <div class="mini-card-icon">🟢</div>
-        <h4>"Available Now" Rules</h4>
-        <p>A leader shows as Available Now only when: they're online, have no active session, and their next open slot starts within 5–10 minutes.</p>
-      </div>
-      <div class="mini-card">
-        <div class="mini-card-icon">🗓️</div>
-        <h4>Slot Generation</h4>
-        <p>Leaders set their daily availability windows. The system auto-generates fixed-duration slots (10/15/30 min) within those windows, with 5-min buffers between sessions.</p>
-      </div>
-      <div class="mini-card">
-        <div class="mini-card-icon">🔒</div>
-        <h4>Lock Mechanism</h4>
-        <p>On slot selection: status → "locked", locked_by → user_id, lock_expires_at → now + 5 min. Background job checks expiry and releases stale locks.</p>
-      </div>
-      <div class="mini-card">
-        <div class="mini-card-icon">🔓</div>
-        <h4>Auto-Release</h4>
-        <p>If payment isn't completed within the lock window, a cron/worker flips the slot back to "available." User is notified: "Your slot was released."</p>
-      </div>
-    </div>
-
-    <div class="callout info">
-      <div class="callout-title">Slot Status Lifecycle</div>
-      <p><code>available</code> → <code>locked</code> (user selects) → <code>booked</code> (payment done) → <code>completed</code> / <code>missed</code> / <code>cancelled</code></p>
-    </div>
-  </div>
-
-  <hr class="divider">
-
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- SECTION 3: PRICING -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div class="section" id="pricing">
-    <div class="section-header">
-      <div class="section-number">03 — MONETIZATION</div>
-      <div class="section-title">Pricing Model</div>
-      <div class="section-subtitle">Start with fixed-slot pricing. Per-minute can come later (requires wallet system).</div>
-    </div>
-
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Model</th>
-          <th>Example</th>
-          <th>Complexity</th>
-          <th>Recommendation</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Fixed Slot Pricing</strong></td>
-          <td>₹499 / 10 min, ₹999 / 15 min, ₹1499 / 30 min</td>
-          <td><span class="tag teal">Low</span></td>
-          <td><span class="tag teal">✅ Launch with this</span></td>
-        </tr>
-        <tr>
-          <td><strong>Per-Minute Pricing</strong></td>
-          <td>₹50/min — billed at session end</td>
-          <td><span class="tag red">High</span></td>
-          <td><span class="tag gold">⏳ Phase 2 (needs wallet)</span></td>
-        </tr>
-        <tr>
-          <td><strong>Subscription Pack</strong></td>
-          <td>₹2999/mo — 4 sessions included</td>
-          <td><span class="tag gold">Medium</span></td>
-          <td><span class="tag blue">💡 Great for retention</span></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="callout success">
-      <div class="callout-title">💰 Platform Commission</div>
-      <p>SoulSensei takes 15–25% commission per session. Leaders see their net payout. Configurable per leader tier (new leaders = higher commission, top leaders = lower).</p>
-    </div>
-  </div>
-
-  <hr class="divider">
-
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- SECTION 4: LEADER DASHBOARD -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div class="section" id="leader-dash">
-    <div class="section-header">
-      <div class="section-number">04 — LEADER SIDE</div>
-      <div class="section-title">Leader Dashboard</div>
-      <div class="section-subtitle">What the spiritual guides see and control on their end.</div>
-    </div>
-
-    <div class="card-grid">
-      <div class="mini-card">
-        <div class="mini-card-icon">🟢</div>
-        <h4>Go Live Toggle</h4>
-        <p>One-tap toggle: 🟢 Available / 🔴 Busy / ⏸ Break. Status syncs instantly to user-facing cards. Only works if availability is approved.</p>
-      </div>
-      <div class="mini-card">
-        <div class="mini-card-icon">📅</div>
-        <h4>Availability Manager</h4>
-        <p>Leaders submit their weekly time windows here. After submission, they see status: Pending / Approved / Rejected for each entry.</p>
-      </div>
-      <div class="mini-card">
-        <div class="mini-card-icon">📋</div>
-        <h4>Upcoming Bookings</h4>
-        <p>Live feed of today's bookings with user name, session type, and "Start Session" button. Accept or auto-accept toggle.</p>
-      </div>
-    </div>
-
-    <div class="callout warn">
-      <div class="callout-title">🔑 Key Change: Availability ≠ Visible</div>
-      <p>Leaders can add their availability, but it won't show on the app until the SoulSensei ops team reviews and approves it. This ensures quality control — no random/fake availability, consistent time coverage, and vetting of new leaders before they go live.</p>
-    </div>
-  </div>
-
-  <hr class="divider">
-
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- SECTION 4B: AVAILABILITY APPROVAL FLOW -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div class="section" id="avail-approval">
-    <div class="section-header">
-      <div class="section-number">04B — APPROVAL SYSTEM</div>
-      <div class="section-title">Leader Availability → Ops Approval → Live on App</div>
-      <div class="section-subtitle">A 5-step gated flow ensuring only approved availability windows are visible to users. The ops team has full control.</div>
-    </div>
-
-    <div class="flow">
-      <!-- Step 1 -->
-      <div class="flow-step">
-        <div class="flow-dot plum">1</div>
-        <div class="flow-card">
-          <div class="flow-card-label">STEP 1 — LEADER SUBMITS AVAILABILITY</div>
-          <div class="flow-card-title">Leader Adds Time Slots</div>
-          <div class="flow-card-desc">From their dashboard, the leader opens the "My Availability" section and adds time windows for the upcoming week. They select date, start time, end time, session type (Tarot, Healing, etc.), and duration per session.</div>
-          <div class="mock-ui">
-            <strong>📅 Add Availability</strong><br>
-            <span class="dim">─────────────────────────────</span><br><br>
-            Date: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="highlight">Mon, 21 Apr 2026</span><br>
-            From: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="highlight">10:00 AM</span><br>
-            To: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="highlight">02:00 PM</span><br>
-            Session Type: <span class="gold">🔮 Tarot Reading</span><br>
-            Duration: &nbsp;&nbsp;&nbsp; 15 min / session<br><br>
-            <span class="btn-mock">Submit for Approval →</span>
-          </div>
-          <div class="tags">
-            <span class="tag plum">📅 Date picker</span>
-            <span class="tag plum">⏰ Time range selector</span>
-            <span class="tag orange">🔮 Session type dropdown</span>
-            <span class="tag blue">🔁 Repeat weekly option</span>
+        <!-- Step 5 -->
+        <div class="flow-step">
+          <div class="flow-dot teal">5</div>
+          <div class="flow-card">
+            <div class="flow-card-label">STEP 5 — CONFIRMATION</div>
+            <div class="flow-card-title">Booking Confirmed ✅</div>
+            <div class="flow-card-desc">Booking confirmed — slot status → "booked", leader gets notified (push +
+              WhatsApp), user sees confirmation with a "Join Session" button that activates at session time.</div>
+            <div class="mock-ui">
+              <span class="highlight">✅ Booking Confirmed!</span><br><br>
+              Your session starts in <strong>5 minutes</strong><br>
+              A link has been sent to your WhatsApp.<br><br>
+              <span class="btn-mock">Join Session →</span>
+            </div>
+            <div class="tags">
+              <span class="tag teal">📲 Push notification</span>
+              <span class="tag teal">💬 WhatsApp confirmation</span>
+              <span class="tag blue">📧 Email receipt</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Step 2 -->
-      <div class="flow-step">
-        <div class="flow-dot gold">2</div>
-        <div class="flow-card">
-          <div class="flow-card-label">STEP 2 — PENDING STATE</div>
-          <div class="flow-card-title">Leader Sees "Pending Approval"</div>
-          <div class="flow-card-desc">After submission, the availability entry appears in the leader's dashboard with a yellow "Pending" badge. The leader cannot go live for these slots until ops approves them. They can edit or cancel pending entries.</div>
-          <div class="mock-ui">
-            <strong>📋 My Availability</strong><br>
-            <span class="dim">─────────────────────────────</span><br><br>
-            Mon 21 Apr &nbsp; 10 AM – 2 PM &nbsp; 🔮 Tarot<br>
-            Status: <span class="gold">🟡 Pending Approval</span><br><br>
-            Tue 22 Apr &nbsp; 6 PM – 9 PM &nbsp;&nbsp; 🧘 Healing<br>
-            Status: <span class="highlight">🟢 Approved</span><br><br>
-            Wed 23 Apr &nbsp; 11 AM – 1 PM &nbsp; ⭐ Astrology<br>
-            Status: <span style="color:#FCA5A5;">🔴 Rejected</span> <span class="dim">— "Overlap with another leader"</span>
-          </div>
-          <div class="tags">
-            <span class="tag gold">🟡 Pending badge</span>
-            <span class="tag teal">✏️ Edit allowed</span>
-            <span class="tag red">🗑️ Cancel option</span>
+        <!-- Step 6 -->
+        <div class="flow-step">
+          <div class="flow-dot gold">6</div>
+          <div class="flow-card">
+            <div class="flow-card-label">STEP 6 — REMINDER</div>
+            <div class="flow-card-title">Pre-Session Nudge</div>
+            <div class="flow-card-desc">If the session is scheduled (not instant), the user gets a reminder 5 minutes
+              before via push + WhatsApp. The "Join Session" button pulses green when the leader is ready.</div>
+            <div class="tags">
+              <span class="tag gold">🔔 5-min reminder push</span>
+              <span class="tag gold">💬 WhatsApp nudge</span>
+              <span class="tag teal">🟢 Leader ready indicator</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Step 3 -->
-      <div class="flow-step">
-        <div class="flow-dot orange">3</div>
-        <div class="flow-card">
-          <div class="flow-card-label">STEP 3 — OPS TEAM REVIEW (ADMIN PANEL)</div>
-          <div class="flow-card-title">Ops Dashboard: Approve / Reject / Modify</div>
-          <div class="flow-card-desc">The SoulSensei ops team sees a queue of all pending availability requests in the Admin Panel. For each entry they see the leader's profile, requested times, session type, and any conflicts. They can approve, reject (with reason), or modify the time window.</div>
-          <div class="mock-ui">
-            <strong>🛡️ ADMIN — Availability Queue</strong><br>
-            <span class="dim">─────────────────────────────</span><br><br>
-            <strong>Swati Ji</strong> &nbsp; <span class="gold">⭐ 4.8</span> &nbsp; 🔮 Tarot<br>
-            Requested: Mon 21 Apr, 10 AM – 2 PM<br>
-            Conflicts: <span class="highlight">None ✓</span><br><br>
-            <span class="btn-mock">✅ Approve</span> &nbsp; <span style="background:#C0392B;display:inline-block;padding:4px 16px;border-radius:6px;font-size:12px;color:#fff;">❌ Reject</span> &nbsp; <span style="background:#B8860B;display:inline-block;padding:4px 16px;border-radius:6px;font-size:12px;color:#fff;">✏️ Modify</span>
-          </div>
-          <div class="callout fire">
-            <div class="callout-title">🔥 Ops Review Criteria</div>
-            <p>The ops team checks for: time conflicts with other leaders in the same domain, leader's track record and reliability, platform demand for that time slot (peak hours prioritized), and whether the leader has completed onboarding/KYC.</p>
-          </div>
-          <div class="tags">
-            <span class="tag orange">✅ Approve</span>
-            <span class="tag red">❌ Reject with reason</span>
-            <span class="tag gold">✏️ Suggest modified time</span>
-            <span class="tag blue">📊 Conflict detection</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 4 -->
-      <div class="flow-step">
-        <div class="flow-dot teal">4</div>
-        <div class="flow-card">
-          <div class="flow-card-label">STEP 4 — LEADER NOTIFIED</div>
-          <div class="flow-card-title">Approval / Rejection Notification</div>
-          <div class="flow-card-desc">Leader gets a push notification + in-app update with the decision. If approved, the status turns green and slots are auto-generated. If rejected, the reason is shown with an option to re-submit with changes.</div>
-          <div class="mock-ui">
-            <span class="highlight">✅ Availability Approved!</span><br><br>
-            Mon 21 Apr &nbsp; 10 AM – 2 PM &nbsp; 🔮 Tarot<br>
-            <span class="dim">16 slots generated (15 min each)</span><br><br>
-            You'll appear as <span class="highlight">"Available"</span> to users<br>
-            during this window. Stay online!
-          </div>
-          <div class="tags">
-            <span class="tag teal">🔔 Push notification</span>
-            <span class="tag teal">💬 WhatsApp alert</span>
-            <span class="tag blue">🔄 Auto slot generation</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 5 -->
-      <div class="flow-step">
-        <div class="flow-dot blue">5</div>
-        <div class="flow-card">
-          <div class="flow-card-label">STEP 5 — LIVE ON APP</div>
-          <div class="flow-card-title">Users See the Leader as Available</div>
-          <div class="flow-card-desc">Only after approval, the leader's slots become visible on the user-facing app. During the approved window, if the leader is online and has no active session, they show as "🟢 Available Now" with the "Talk Now" button.</div>
-          <div class="mock-ui">
-            <span class="dim">─── USER APP ───────────────</span><br><br>
-            🔮 <strong>Tarot Reading</strong><br>
-            <strong>Swati Ji</strong> &nbsp; <span class="gold">⭐ 4.8</span><br><br>
-            <span class="highlight">🟢 Available Now</span> &nbsp; <span class="dim">until 2:00 PM</span><br>
-            ₹999 / 15 min<br><br>
-            <span class="btn-mock">Talk Now →</span>
-          </div>
-          <div class="callout success">
-            <div class="callout-title">✅ The Gate is Clear</div>
-            <p>Only at this point does the regular user journey (Section 01) kick in. The approval system acts as a quality gate before the booking engine.</p>
+        <!-- Step 7 -->
+        <div class="flow-step">
+          <div class="flow-dot orange">7</div>
+          <div class="flow-card">
+            <div class="flow-card-label">STEP 7 — LIVE SESSION</div>
+            <div class="flow-card-title">Join & Connect</div>
+            <div class="flow-card-desc">User taps "Join Session" → enters the video/audio call. Clean, distraction-free
+              UI. Session timer runs. At the end, user is prompted to rate and can rebook the same leader.</div>
+            <div class="tags">
+              <span class="tag orange">📹 WebRTC / Agora</span>
+              <span class="tag blue">⏱ Session timer</span>
+              <span class="tag plum">⭐ Post-session rating</span>
+              <span class="tag teal">🔁 Rebook CTA</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Approval Flow Summary -->
-    <div style="background:var(--ink);border-radius:12px;padding:28px 28px;margin-top:24px;color:#fff;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:-30%;right:-10%;width:200px;height:200px;background:radial-gradient(circle,rgba(107,63,160,0.2),transparent 70%);pointer-events:none;"></div>
-      <h4 style="font-family:'Instrument Serif',serif;font-size:20px;margin-bottom:14px;position:relative;">Approval Pipeline at a Glance</h4>
-      <div class="summary-steps" style="position:relative;">
-        <span class="summary-pill">📅 Leader Submits</span>
-        <span class="summary-arrow">→</span>
-        <span class="summary-pill">🟡 Pending</span>
-        <span class="summary-arrow">→</span>
-        <span class="summary-pill">🛡️ Ops Reviews</span>
-        <span class="summary-arrow">→</span>
-        <span class="summary-pill">✅ Approved</span>
-        <span class="summary-arrow">→</span>
-        <span class="summary-pill">⚙️ Slots Generated</span>
-        <span class="summary-arrow">→</span>
-        <span class="summary-pill">🟢 Live on App</span>
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION 2: SLOT LOGIC -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="section" id="slot-logic">
+      <div class="section-header">
+        <div class="section-number">02 — BACKEND LOGIC</div>
+        <div class="section-title">Availability & Slot Locking</div>
+        <div class="section-subtitle">The engine that prevents double-bookings and keeps everything in sync.</div>
+      </div>
+
+      <div class="card-grid">
+        <div class="mini-card">
+          <div class="mini-card-icon">🟢</div>
+          <h4>"Available Now" Rules</h4>
+          <p>A leader shows as Available Now only when: they're online, have no active session, and their next open slot
+            starts within 5–10 minutes.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-icon">🗓️</div>
+          <h4>Slot Generation</h4>
+          <p>Leaders set their daily availability windows. The system auto-generates fixed-duration slots (10/15/30 min)
+            within those windows, with 5-min buffers between sessions.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-icon">🔒</div>
+          <h4>Lock Mechanism</h4>
+          <p>On slot selection: status → "locked", locked_by → user_id, lock_expires_at → now + 5 min. Background job
+            checks expiry and releases stale locks.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-icon">🔓</div>
+          <h4>Auto-Release</h4>
+          <p>If payment isn't completed within the lock window, a cron/worker flips the slot back to "available." User
+            is notified: "Your slot was released."</p>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-title">Slot Status Lifecycle</div>
+        <p><code>available</code> → <code>locked</code> (user selects) → <code>booked</code> (payment done) →
+          <code>completed</code> / <code>missed</code> / <code>cancelled</code></p>
       </div>
     </div>
 
-    <!-- Edge cases for approval -->
-    <div style="margin-top:28px;">
-      <h4 style="font-family:'Instrument Serif',serif;font-size:20px;margin-bottom:14px;">Approval Edge Cases</h4>
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION 3: LEADER DASHBOARD -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="section" id="leader-dash">
+      <div class="section-header">
+        <div class="section-number">03 — LEADER SIDE</div>
+        <div class="section-title">Leader Dashboard</div>
+        <div class="section-subtitle">What the spiritual guides see and control on their end.</div>
+      </div>
+
+      <div class="card-grid">
+        <div class="mini-card">
+          <div class="mini-card-icon">🟢</div>
+          <h4>Go Live Toggle</h4>
+          <p>One-tap toggle: 🟢 Available / 🔴 Busy / ⏸ Break. Status syncs instantly to user-facing cards. Only works
+            if availability is approved.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-icon">📅</div>
+          <h4>Availability Manager</h4>
+          <p>Leaders submit their weekly time windows here. After submission, they see status: Pending / Approved /
+            Rejected for each entry.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-icon">📋</div>
+          <h4>Upcoming Bookings</h4>
+          <p>Live feed of today's bookings with user name, session type, and "Start Session" button. Accept or
+            auto-accept toggle.</p>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <div class="callout-title">🔑 Key Change: Availability ≠ Visible</div>
+        <p>Leaders can add their availability, but it won't show on the app until the SoulSensei ops team reviews and
+          approves it. This ensures quality control — no random/fake availability, consistent time coverage, and vetting
+          of new leaders before they go live.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION 4B: AVAILABILITY APPROVAL FLOW -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="section" id="avail-approval">
+      <div class="section-header">
+        <div class="section-number">03B — APPROVAL SYSTEM</div>
+        <div class="section-title">Leader Availability → Ops Approval → Live on App</div>
+        <div class="section-subtitle">A 5-step gated flow ensuring only approved availability windows are visible to
+          users. The ops team has full control.</div>
+      </div>
+
+      <div class="flow">
+        <!-- Step 1 -->
+        <div class="flow-step">
+          <div class="flow-dot plum">1</div>
+          <div class="flow-card">
+            <div class="flow-card-label">STEP 1 — LEADER SUBMITS AVAILABILITY</div>
+            <div class="flow-card-title">Leader Adds Time Slots</div>
+            <div class="flow-card-desc">From their dashboard, the leader opens the "My Availability" section and adds
+              time windows for the upcoming week. They select date, start time, end time, session type (Tarot, Healing,
+              etc.), and duration per session.</div>
+            <div class="mock-ui">
+              <strong>📅 Add Availability</strong><br>
+              <span class="dim">─────────────────────────────</span><br><br>
+              Date: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="highlight">Mon, 21 Apr 2026</span><br>
+              From: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="highlight">10:00 AM</span><br>
+              To: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="highlight">02:00 PM</span><br>
+              Session Type: <span class="gold">🔮 Tarot Reading</span><br>
+              Duration: &nbsp;&nbsp;&nbsp; 15 min / session<br><br>
+              <span class="btn-mock">Submit for Approval →</span>
+            </div>
+            <div class="tags">
+              <span class="tag plum">📅 Date picker</span>
+              <span class="tag plum">⏰ Time range selector</span>
+              <span class="tag orange">🔮 Session type dropdown</span>
+              <span class="tag blue">🔁 Repeat weekly option</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="flow-step">
+          <div class="flow-dot gold">2</div>
+          <div class="flow-card">
+            <div class="flow-card-label">STEP 2 — PENDING STATE</div>
+            <div class="flow-card-title">Leader Sees "Pending Approval"</div>
+            <div class="flow-card-desc">After submission, the availability entry appears in the leader's dashboard with
+              a yellow "Pending" badge. The leader cannot go live for these slots until ops approves them. They can edit
+              or cancel pending entries.</div>
+            <div class="mock-ui">
+              <strong>📋 My Availability</strong><br>
+              <span class="dim">─────────────────────────────</span><br><br>
+              Mon 21 Apr &nbsp; 10 AM – 2 PM &nbsp; 🔮 Tarot<br>
+              Status: <span class="gold">🟡 Pending Approval</span><br><br>
+              Tue 22 Apr &nbsp; 6 PM – 9 PM &nbsp;&nbsp; 🧘 Healing<br>
+              Status: <span class="highlight">🟢 Approved</span><br><br>
+              Wed 23 Apr &nbsp; 11 AM – 1 PM &nbsp; ⭐ Astrology<br>
+              Status: <span style="color:#FCA5A5;">🔴 Rejected</span> <span class="dim">— "Overlap with another
+                leader"</span>
+            </div>
+            <div class="tags">
+              <span class="tag gold">🟡 Pending badge</span>
+              <span class="tag teal">✏️ Edit allowed</span>
+              <span class="tag red">🗑️ Cancel option</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="flow-step">
+          <div class="flow-dot orange">3</div>
+          <div class="flow-card">
+            <div class="flow-card-label">STEP 3 — OPS TEAM REVIEW (ADMIN PANEL)</div>
+            <div class="flow-card-title">Ops Dashboard: Approve / Reject / Modify</div>
+            <div class="flow-card-desc">The SoulSensei ops team sees a queue of all pending availability requests in the
+              Admin Panel. For each entry they see the leader's profile, requested times, session type, and any
+              conflicts. They can approve, reject (with reason), or modify the time window.</div>
+            <div class="mock-ui">
+              <strong>🛡️ ADMIN — Availability Queue</strong><br>
+              <span class="dim">─────────────────────────────</span><br><br>
+              <strong>Swati Ji</strong> &nbsp; <span class="gold">⭐ 4.8</span> &nbsp; 🔮 Tarot<br>
+              Requested: Mon 21 Apr, 10 AM – 2 PM<br>
+              Conflicts: <span class="highlight">None ✓</span><br><br>
+              <span class="btn-mock">✅ Approve</span> &nbsp; <span
+                style="background:#C0392B;display:inline-block;padding:4px 16px;border-radius:6px;font-size:12px;color:#fff;">❌
+                Reject</span> &nbsp; <span
+                style="background:#B8860B;display:inline-block;padding:4px 16px;border-radius:6px;font-size:12px;color:#fff;">✏️
+                Modify</span>
+            </div>
+            <div class="callout fire">
+              <div class="callout-title">🔥 Ops Review Criteria</div>
+              <p>The ops team checks for: time conflicts with other leaders in the same domain, leader's track record
+                and reliability, platform demand for that time slot (peak hours prioritized), and whether the leader has
+                completed onboarding/KYC.</p>
+            </div>
+            <div class="tags">
+              <span class="tag orange">✅ Approve</span>
+              <span class="tag red">❌ Reject with reason</span>
+              <span class="tag gold">✏️ Suggest modified time</span>
+              <span class="tag blue">📊 Conflict detection</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="flow-step">
+          <div class="flow-dot teal">4</div>
+          <div class="flow-card">
+            <div class="flow-card-label">STEP 4 — LEADER NOTIFIED</div>
+            <div class="flow-card-title">Approval / Rejection Notification</div>
+            <div class="flow-card-desc">Leader gets a push notification + in-app update with the decision. If approved,
+              the status turns green and slots are auto-generated. If rejected, the reason is shown with an option to
+              re-submit with changes.</div>
+            <div class="mock-ui">
+              <span class="highlight">✅ Availability Approved!</span><br><br>
+              Mon 21 Apr &nbsp; 10 AM – 2 PM &nbsp; 🔮 Tarot<br>
+              <span class="dim">16 slots generated (15 min each)</span><br><br>
+              You'll appear as <span class="highlight">"Available"</span> to users<br>
+              during this window. Stay online!
+            </div>
+            <div class="tags">
+              <span class="tag teal">🔔 Push notification</span>
+              <span class="tag teal">💬 WhatsApp alert</span>
+              <span class="tag blue">🔄 Auto slot generation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="flow-step">
+          <div class="flow-dot blue">5</div>
+          <div class="flow-card">
+            <div class="flow-card-label">STEP 5 — LIVE ON APP</div>
+            <div class="flow-card-title">Users See the Leader as Available</div>
+            <div class="flow-card-desc">Only after approval, the leader's slots become visible on the user-facing app.
+              During the approved window, if the leader is online and has no active session, they show as "🟢 Available
+              Now" with the "Talk Now" button.</div>
+            <div class="mock-ui">
+              <span class="dim">─── USER APP ───────────────</span><br><br>
+              🔮 <strong>Tarot Reading</strong><br>
+              <strong>Swati Ji</strong> &nbsp; <span class="gold">⭐ 4.8</span><br><br>
+              <span class="highlight">🟢 Available Now</span> &nbsp; <span class="dim">until 2:00 PM</span><br>
+              15 min session<br><br>
+              <span class="btn-mock">Talk Now →</span>
+            </div>
+            <div class="callout success">
+              <div class="callout-title">✅ The Gate is Clear</div>
+              <p>Only at this point does the regular user journey (Section 01) kick in. The approval system acts as a
+                quality gate before the booking engine.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Approval Flow Summary -->
+      <div
+        style="background:var(--ink);border-radius:12px;padding:28px 28px;margin-top:24px;color:#fff;position:relative;overflow:hidden;">
+        <div
+          style="position:absolute;top:-30%;right:-10%;width:200px;height:200px;background:radial-gradient(circle,rgba(107,63,160,0.2),transparent 70%);pointer-events:none;">
+        </div>
+        <h4 style="font-family:'Instrument Serif',serif;font-size:20px;margin-bottom:14px;position:relative;">Approval
+          Pipeline at a Glance</h4>
+        <div class="summary-steps" style="position:relative;">
+          <span class="summary-pill">📅 Leader Submits</span>
+          <span class="summary-arrow">→</span>
+          <span class="summary-pill">🟡 Pending</span>
+          <span class="summary-arrow">→</span>
+          <span class="summary-pill">🛡️ Ops Reviews</span>
+          <span class="summary-arrow">→</span>
+          <span class="summary-pill">✅ Approved</span>
+          <span class="summary-arrow">→</span>
+          <span class="summary-pill">⚙️ Slots Generated</span>
+          <span class="summary-arrow">→</span>
+          <span class="summary-pill">🟢 Live on App</span>
+        </div>
+      </div>
+
+      <!-- Edge cases for approval -->
+      <div style="margin-top:28px;">
+        <h4 style="font-family:'Instrument Serif',serif;font-size:20px;margin-bottom:14px;">Approval Edge Cases</h4>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Scenario</th>
+              <th>System Behavior</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Leader submits overlapping times</strong></td>
+              <td>Client-side validation blocks it. "You already have an entry for this time range."</td>
+            </tr>
+            <tr>
+              <td><strong>Ops modifies the time window</strong></td>
+              <td>Leader gets notified: "Your 10 AM–2 PM was adjusted to 11 AM–2 PM. Tap to accept."</td>
+            </tr>
+            <tr>
+              <td><strong>Leader doesn't show up during approved window</strong></td>
+              <td>System marks as "no-show." Reliability score drops. Repeated no-shows → auto-deprioritize in queue.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Ops doesn't review within 24 hours</strong></td>
+              <td>Auto-escalation: entry highlighted red in admin panel. Slack/email alert to ops manager.</td>
+            </tr>
+            <tr>
+              <td><strong>Leader wants to cancel approved availability</strong></td>
+              <td>If no bookings on those slots → instant cancel. If bookings exist → must contact ops for manual
+                resolution.</td>
+            </tr>
+            <tr>
+              <td><strong>Recurring weekly availability</strong></td>
+              <td>First submission needs approval. After 4 consecutive approved weeks with good attendance, auto-approve
+                kicks in for that leader.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION 5: EDGE CASES -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="section" id="edge-cases">
+      <div class="section-header">
+        <div class="section-number">04 — SAFEGUARDS</div>
+        <div class="section-title">Edge Cases & Fail-Safes</div>
+        <div class="section-subtitle">What happens when things don't go as planned. Every scenario needs a defined path.
+        </div>
+      </div>
+
       <table class="data-table">
         <thead>
           <tr>
             <th>Scenario</th>
-            <th>System Behavior</th>
+            <th>What Happens</th>
+            <th>User Sees</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>Leader submits overlapping times</strong></td>
-            <td>Client-side validation blocks it. "You already have an entry for this time range."</td>
+            <td><strong>User pays, leader unavailable</strong></td>
+            <td>Auto-assign next slot OR suggest alternate leader OR full refund</td>
+            <td>"Leader stepped away. We've moved you to 7:45 PM. Refund if not okay."</td>
           </tr>
           <tr>
-            <td><strong>Ops modifies the time window</strong></td>
-            <td>Leader gets notified: "Your 10 AM–2 PM was adjusted to 11 AM–2 PM. Tap to accept."</td>
+            <td><strong>User doesn't join</strong></td>
+            <td>Mark as "missed." No refund (or partial based on policy).</td>
+            <td>"You missed your session. Contact support for assistance."</td>
           </tr>
           <tr>
-            <td><strong>Leader doesn't show up during approved window</strong></td>
-            <td>System marks as "no-show." Reliability score drops. Repeated no-shows → auto-deprioritize in queue.</td>
+            <td><strong>Leader cancels</strong></td>
+            <td>Full refund + apology coupon (10% off next booking)</td>
+            <td>"Your leader cancelled. Full refund issued + 10% off your next session."</td>
           </tr>
           <tr>
-            <td><strong>Ops doesn't review within 24 hours</strong></td>
-            <td>Auto-escalation: entry highlighted red in admin panel. Slack/email alert to ops manager.</td>
+            <td><strong>Payment fails mid-lock</strong></td>
+            <td>Slot auto-releases after lock expiry. No charge.</td>
+            <td>"Payment didn't go through. Your slot has been released. Try again."</td>
           </tr>
           <tr>
-            <td><strong>Leader wants to cancel approved availability</strong></td>
-            <td>If no bookings on those slots → instant cancel. If bookings exist → must contact ops for manual resolution.</td>
+            <td><strong>Two users lock same slot</strong></td>
+            <td>First lock wins (DB-level atomic operation). Second user sees "Slot taken."</td>
+            <td>"This slot was just taken. Here are other available times →"</td>
           </tr>
           <tr>
-            <td><strong>Recurring weekly availability</strong></td>
-            <td>First submission needs approval. After 4 consecutive approved weeks with good attendance, auto-approve kicks in for that leader.</td>
+            <td><strong>Session runs overtime</strong></td>
+            <td>Soft warning at 2 min left. Hard cut at buffer end. Next session protected.</td>
+            <td>"2 minutes remaining in your session."</td>
           </tr>
         </tbody>
       </table>
     </div>
-  </div>
 
-  <hr class="divider">
+    <hr class="divider">
 
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- SECTION 5: EDGE CASES -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div class="section" id="edge-cases">
-    <div class="section-header">
-      <div class="section-number">05 — SAFEGUARDS</div>
-      <div class="section-title">Edge Cases & Fail-Safes</div>
-      <div class="section-subtitle">What happens when things don't go as planned. Every scenario needs a defined path.</div>
-    </div>
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION 6: DB DESIGN -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="section" id="db-design">
+      <div class="section-header">
+        <div class="section-number">05 — DATA MODEL</div>
+        <div class="section-title">New Tables to Add</div>
+        <div class="section-subtitle">2 new tables for bookings and availability approval tracking. Connected to your
+          existing <code>leaders</code> table via <code>leaderId</code> and your existing <code>tag_slug</code> table
+          via <code>slug</code>.</div>
+      </div>
 
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Scenario</th>
-          <th>What Happens</th>
-          <th>User Sees</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>User pays, leader unavailable</strong></td>
-          <td>Auto-assign next slot OR suggest alternate leader OR full refund</td>
-          <td>"Leader stepped away. We've moved you to 7:45 PM. Refund if not okay."</td>
-        </tr>
-        <tr>
-          <td><strong>User doesn't join</strong></td>
-          <td>Mark as "missed." No refund (or partial based on policy).</td>
-          <td>"You missed your session. Contact support for assistance."</td>
-        </tr>
-        <tr>
-          <td><strong>Leader cancels</strong></td>
-          <td>Full refund + apology coupon (10% off next booking)</td>
-          <td>"Your leader cancelled. Full refund issued + 10% off your next session."</td>
-        </tr>
-        <tr>
-          <td><strong>Payment fails mid-lock</strong></td>
-          <td>Slot auto-releases after lock expiry. No charge.</td>
-          <td>"Payment didn't go through. Your slot has been released. Try again."</td>
-        </tr>
-        <tr>
-          <td><strong>Two users lock same slot</strong></td>
-          <td>First lock wins (DB-level atomic operation). Second user sees "Slot taken."</td>
-          <td>"This slot was just taken. Here are other available times →"</td>
-        </tr>
-        <tr>
-          <td><strong>Session runs overtime</strong></td>
-          <td>Soft warning at 2 min left. Hard cut at buffer end. Next session protected.</td>
-          <td>"2 minutes remaining in your session."</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      <div class="callout info">
+        <div class="callout-title">ℹ️ Your existing tables stay untouched</div>
+        <p><code>leaders</code> table — already exists, no changes.<br><code>tag_slug</code> table — already exists, no
+          changes.<br>Both new tables below reference them via foreign keys.</p>
+      </div>
 
-  <hr class="divider">
-
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- SECTION 6: DB DESIGN -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div class="section" id="db-design">
-    <div class="section-header">
-      <div class="section-number">06 — DATA MODEL</div>
-      <div class="section-title">New Tables to Add</div>
-      <div class="section-subtitle">2 new tables for bookings and availability approval tracking. Connected to your existing <code>leaders</code> table via <code>leaderId</code> and your existing <code>tag_slug</code> table via <code>slug</code>.</div>
-    </div>
-
-    <div class="callout info">
-      <div class="callout-title">ℹ️ Your existing tables stay untouched</div>
-      <p><code>leaders</code> table — already exists, no changes.<br><code>tag_slug</code> table — already exists, no changes.<br>Both new tables below reference them via foreign keys.</p>
-    </div>
-
-    <!-- TABLE 1: bookings -->
-    <div style="margin-bottom:8px;font-family:'Geist Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--accent);text-transform:uppercase;">Table 1 — Bookings</div>
-    <div class="schema-block">
-      <span class="table-name">bookings</span> <span class="comment">-- NEW: tracks every user ↔ leader session booking</span><br>
-      <br>
-      &nbsp;&nbsp;<span class="col-name">id</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">UUID</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PK<br>
-      &nbsp;&nbsp;<span class="col-name">leaderId</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">UUID</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FK → <span class="table-name">leaders</span>.id<br>
-      &nbsp;&nbsp;<span class="col-name">userId</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">UUID</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FK → <span class="table-name">users</span>.id<br>
-      &nbsp;&nbsp;<span class="col-name">slug</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">VARCHAR</span> &nbsp;&nbsp; FK → <span class="table-name">tag_slug</span>.slug <span class="comment">-- which service was booked</span><br>
-      <br>
-      &nbsp;&nbsp;<span class="comment">── Slot Details ──</span><br>
-      &nbsp;&nbsp;<span class="col-name">slotDate</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">DATE</span><br>
-      &nbsp;&nbsp;<span class="col-name">slotStartTime</span> &nbsp;&nbsp;&nbsp; <span class="col-type">TIME</span><br>
-      &nbsp;&nbsp;<span class="col-name">slotEndTime</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">TIME</span><br>
-      &nbsp;&nbsp;<span class="col-name">durationMin</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">INT</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- 10, 15, 30</span><br>
-      <br>
-      &nbsp;&nbsp;<span class="comment">── Payment ──</span><br>
-      &nbsp;&nbsp;<span class="col-name">amount</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">INT</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- in paise/cents</span><br>
-      &nbsp;&nbsp;<span class="col-name">paymentId</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">VARCHAR</span> &nbsp;&nbsp; <span class="comment">-- Razorpay/Stripe ref</span><br>
-      &nbsp;&nbsp;<span class="col-name">paymentStatus</span> &nbsp;&nbsp;&nbsp; <span class="col-type">ENUM</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- pending, paid, refunded, failed</span><br>
-      <br>
-      &nbsp;&nbsp;<span class="comment">── Session Tracking ──</span><br>
-      &nbsp;&nbsp;<span class="col-name">sessionStatus</span> &nbsp;&nbsp;&nbsp; <span class="col-type">ENUM</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- upcoming, live, completed, missed, cancelled</span><br>
-      &nbsp;&nbsp;<span class="col-name">slotLocked</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">BOOLEAN</span> &nbsp;&nbsp; <span class="comment">-- true while slot is held</span><br>
-      &nbsp;&nbsp;<span class="col-name">lockExpiresAt</span> &nbsp;&nbsp;&nbsp; <span class="col-type">TIMESTAMP</span> <span class="comment">-- auto-release trigger</span><br>
-      &nbsp;&nbsp;<span class="col-name">sessionLink</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">VARCHAR</span> &nbsp;&nbsp; <span class="comment">-- video call URL (nullable)</span><br>
-      &nbsp;&nbsp;<span class="col-name">rating</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">DECIMAL</span> &nbsp;&nbsp; <span class="comment">-- user's post-session rating (nullable)</span><br>
-      &nbsp;&nbsp;<span class="col-name">review</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">TEXT</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- user's review text (nullable)</span><br>
-      <br>
-      &nbsp;&nbsp;<span class="col-name">createdAt</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">TIMESTAMP</span><br>
-      &nbsp;&nbsp;<span class="col-name">updatedAt</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">TIMESTAMP</span>
-    </div>
-
-    <div class="callout fire">
-      <div class="callout-title">🔥 Why <code>slug</code> in bookings?</div>
-      <p>Links to your existing <code>tag_slug</code> table so you know exactly which service type was booked (tarot-reading, astrology, reiki-healing, etc.). Enables filtering bookings by domain: <code>/bookings?slug=tarot-reading</code> and dashboard analytics per service type.</p>
-    </div>
-
-    <!-- TABLE 2: leader_availability_approvals -->
-    <div style="margin-top:32px;margin-bottom:8px;font-family:'Geist Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--teal);text-transform:uppercase;">Table 2 — Leader Availability Approvals</div>
-    <div class="schema-block">
-      <span class="table-name">leader_availability_approvals</span> <span class="comment">-- NEW: ops team approval tracking</span><br>
-      <br>
-      &nbsp;&nbsp;<span class="col-name">id</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">UUID</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PK<br>
-      &nbsp;&nbsp;<span class="col-name">leaderId</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">UUID</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FK → <span class="table-name">leaders</span>.id<br>
-      &nbsp;&nbsp;<span class="col-name">slug</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">VARCHAR</span> &nbsp;&nbsp; FK → <span class="table-name">tag_slug</span>.slug <span class="comment">-- which service they're offering</span><br>
-      <br>
-      &nbsp;&nbsp;<span class="comment">── Requested Availability ──</span><br>
-      &nbsp;&nbsp;<span class="col-name">date</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">DATE</span><br>
-      &nbsp;&nbsp;<span class="col-name">startTime</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">TIME</span><br>
-      &nbsp;&nbsp;<span class="col-name">endTime</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">TIME</span><br>
-      &nbsp;&nbsp;<span class="col-name">durationMin</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">INT</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- session length: 10, 15, 30</span><br>
-      &nbsp;&nbsp;<span class="col-name">isRecurring</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">BOOLEAN</span> &nbsp;&nbsp; <span class="comment">-- repeat weekly?</span><br>
-      <br>
-      &nbsp;&nbsp;<span class="comment">── Approval Workflow ──</span><br>
-      &nbsp;&nbsp;<span class="col-name">status</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">ENUM</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- pending, approved, rejected, cancelled</span><br>
-      &nbsp;&nbsp;<span class="col-name">reviewedBy</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">UUID</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- FK → admin_users (nullable)</span><br>
-      &nbsp;&nbsp;<span class="col-name">rejectReason</span> &nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">VARCHAR</span> &nbsp;&nbsp; <span class="comment">-- nullable, shown to leader</span><br>
-      &nbsp;&nbsp;<span class="col-name">modifiedStartTime</span> <span class="col-type">TIME</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- if ops adjusted the time (nullable)</span><br>
-      &nbsp;&nbsp;<span class="col-name">modifiedEndTime</span> &nbsp; <span class="col-type">TIME</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- if ops adjusted the time (nullable)</span><br>
-      <br>
-      &nbsp;&nbsp;<span class="col-name">submittedAt</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">TIMESTAMP</span> <span class="comment">-- when leader submitted</span><br>
-      &nbsp;&nbsp;<span class="col-name">reviewedAt</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">TIMESTAMP</span> <span class="comment">-- when ops acted (nullable)</span><br>
-      &nbsp;&nbsp;<span class="col-name">createdAt</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">TIMESTAMP</span><br>
-      &nbsp;&nbsp;<span class="col-name">updatedAt</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">TIMESTAMP</span>
-    </div>
-
-    <!-- Relationship diagram -->
-    <div style="background:var(--ink);border-radius:12px;padding:28px;margin-top:24px;color:#fff;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:-30%;right:-10%;width:200px;height:200px;background:radial-gradient(circle,rgba(42,123,111,0.15),transparent 70%);pointer-events:none;"></div>
-      <h4 style="font-family:'Instrument Serif',serif;font-size:20px;margin-bottom:18px;position:relative;">🔗 How Everything Connects</h4>
-      <div style="font-family:'Geist Mono',monospace;font-size:13px;line-height:2.2;position:relative;">
-        <span style="color:#6EE7B7;font-weight:700;">leaders</span> <span style="color:rgba(255,255,255,0.25);">(your existing table)</span><br>
-        &nbsp;&nbsp;├── <span style="color:#93C5FD;">leaderId</span> ←── <span style="color:#FCA5A5;font-weight:700;">bookings</span><br>
-        &nbsp;&nbsp;└── <span style="color:#93C5FD;">leaderId</span> ←── <span style="color:#FBBF24;font-weight:700;">leader_availability_approvals</span><br>
+      <!-- TABLE 1: bookings -->
+      <div
+        style="margin-bottom:8px;font-family:'Geist Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--accent);text-transform:uppercase;">
+        Table 1 — Bookings</div>
+      <div class="schema-block">
+        <span class="table-name">bookings</span> <span class="comment">-- NEW: tracks every user ↔ leader session
+          booking</span><br>
         <br>
-        <span style="color:#6EE7B7;font-weight:700;">tag_slug</span> <span style="color:rgba(255,255,255,0.25);">(your existing table)</span><br>
-        &nbsp;&nbsp;├── <span style="color:#93C5FD;">slug</span> ←──── <span style="color:#FCA5A5;font-weight:700;">bookings</span>.slug<br>
-        &nbsp;&nbsp;└── <span style="color:#93C5FD;">slug</span> ←──── <span style="color:#FBBF24;font-weight:700;">leader_availability_approvals</span>.slug
+        &nbsp;&nbsp;<span class="col-name">id</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">UUID</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PK<br>
+        &nbsp;&nbsp;<span class="col-name">leaderId</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">UUID</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FK → <span
+          class="table-name">leaders</span>.id<br>
+        &nbsp;&nbsp;<span class="col-name">userId</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="col-type">UUID</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FK → <span
+          class="table-name">users</span>.id<br>
+        &nbsp;&nbsp;<span class="col-name">slug</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">VARCHAR</span>
+        &nbsp;&nbsp; FK → <span class="table-name">tag_slug</span>.slug <span class="comment">-- which service was
+          booked</span><br>
+        <br>
+        &nbsp;&nbsp;<span class="comment">── Slot Details ──</span><br>
+        &nbsp;&nbsp;<span class="col-name">slotDate</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">DATE</span><br>
+        &nbsp;&nbsp;<span class="col-name">slotStartTime</span> &nbsp;&nbsp;&nbsp; <span
+          class="col-type">TIME</span><br>
+        &nbsp;&nbsp;<span class="col-name">slotEndTime</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">TIME</span><br>
+        &nbsp;&nbsp;<span class="col-name">durationMin</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">INT</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- 10, 15,
+          30</span><br>
+        <br>
+        &nbsp;&nbsp;<span class="comment">── Payment ──</span><br>
+        &nbsp;&nbsp;<span class="col-name">paymentId</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">VARCHAR</span> &nbsp;&nbsp; <span class="comment">-- Razorpay/Stripe ref</span><br>
+        &nbsp;&nbsp;<span class="col-name">paymentStatus</span> &nbsp;&nbsp;&nbsp; <span class="col-type">ENUM</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- pending, paid, refunded, failed</span><br>
+        <br>
+        &nbsp;&nbsp;<span class="comment">── Session Tracking ──</span><br>
+        &nbsp;&nbsp;<span class="col-name">sessionStatus</span> &nbsp;&nbsp;&nbsp; <span class="col-type">ENUM</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- upcoming, live, completed, missed, cancelled</span><br>
+        &nbsp;&nbsp;<span class="col-name">slotLocked</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">BOOLEAN</span> &nbsp;&nbsp; <span class="comment">-- true while slot is held</span><br>
+        &nbsp;&nbsp;<span class="col-name">lockExpiresAt</span> &nbsp;&nbsp;&nbsp; <span
+          class="col-type">TIMESTAMP</span> <span class="comment">-- auto-release trigger</span><br>
+        &nbsp;&nbsp;<span class="col-name">sessionLink</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">VARCHAR</span> &nbsp;&nbsp; <span class="comment">-- video call URL (nullable)</span><br>
+        &nbsp;&nbsp;<span class="col-name">rating</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="col-type">DECIMAL</span> &nbsp;&nbsp; <span class="comment">-- user's post-session rating
+          (nullable)</span><br>
+        &nbsp;&nbsp;<span class="col-name">review</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="col-type">TEXT</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- user's review text
+          (nullable)</span><br>
+        <br>
+        &nbsp;&nbsp;<span class="col-name">createdAt</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">TIMESTAMP</span><br>
+        &nbsp;&nbsp;<span class="col-name">updatedAt</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">TIMESTAMP</span>
+      </div>
+
+      <div class="callout fire">
+        <div class="callout-title">🔥 Why <code>slug</code> in bookings?</div>
+        <p>Links to your existing <code>tag_slug</code> table so you know exactly which service type was booked
+          (tarot-reading, astrology, reiki-healing, etc.). Enables filtering bookings by domain:
+          <code>/bookings?slug=tarot-reading</code> and dashboard analytics per service type.</p>
+      </div>
+
+      <!-- TABLE 2: leader_availability_approvals -->
+      <div
+        style="margin-top:32px;margin-bottom:8px;font-family:'Geist Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--teal);text-transform:uppercase;">
+        Table 2 — Leader Availability Approvals</div>
+      <div class="schema-block">
+        <span class="table-name">leader_availability_approvals</span> <span class="comment">-- NEW: ops team approval
+          tracking</span><br>
+        <br>
+        &nbsp;&nbsp;<span class="col-name">id</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">UUID</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PK<br>
+        &nbsp;&nbsp;<span class="col-name">leaderId</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">UUID</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FK → <span
+          class="table-name">leaders</span>.id<br>
+        &nbsp;&nbsp;<span class="col-name">slug</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">VARCHAR</span>
+        &nbsp;&nbsp; FK → <span class="table-name">tag_slug</span>.slug <span class="comment">-- which service they're
+          offering</span><br>
+        <br>
+        &nbsp;&nbsp;<span class="comment">── Requested Availability ──</span><br>
+        &nbsp;&nbsp;<span class="col-name">date</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="col-type">DATE</span><br>
+        &nbsp;&nbsp;<span class="col-name">startTime</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">TIME</span><br>
+        &nbsp;&nbsp;<span class="col-name">endTime</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">TIME</span><br>
+        &nbsp;&nbsp;<span class="col-name">durationMin</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">INT</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- session length: 10,
+          15, 30</span><br>
+        &nbsp;&nbsp;<span class="col-name">isRecurring</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">BOOLEAN</span> &nbsp;&nbsp; <span class="comment">-- repeat weekly?</span><br>
+        <br>
+        &nbsp;&nbsp;<span class="comment">── Approval Workflow ──</span><br>
+        &nbsp;&nbsp;<span class="col-name">status</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="col-type">ENUM</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- pending, approved,
+          rejected, cancelled</span><br>
+        &nbsp;&nbsp;<span class="col-name">reviewedBy</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">UUID</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- FK → admin_users
+          (nullable)</span><br>
+        &nbsp;&nbsp;<span class="col-name">rejectReason</span> &nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">VARCHAR</span> &nbsp;&nbsp; <span class="comment">-- nullable, shown to leader</span><br>
+        &nbsp;&nbsp;<span class="col-name">modifiedStartTime</span> <span class="col-type">TIME</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- if ops adjusted the time (nullable)</span><br>
+        &nbsp;&nbsp;<span class="col-name">modifiedEndTime</span> &nbsp; <span class="col-type">TIME</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">-- if ops adjusted the time (nullable)</span><br>
+        <br>
+        &nbsp;&nbsp;<span class="col-name">submittedAt</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">TIMESTAMP</span> <span class="comment">-- when leader submitted</span><br>
+        &nbsp;&nbsp;<span class="col-name">reviewedAt</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">TIMESTAMP</span> <span class="comment">-- when ops acted (nullable)</span><br>
+        &nbsp;&nbsp;<span class="col-name">createdAt</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">TIMESTAMP</span><br>
+        &nbsp;&nbsp;<span class="col-name">updatedAt</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+          class="col-type">TIMESTAMP</span>
+      </div>
+
+      <!-- Relationship diagram -->
+      <div
+        style="background:var(--ink);border-radius:12px;padding:28px;margin-top:24px;color:#fff;position:relative;overflow:hidden;">
+        <div
+          style="position:absolute;top:-30%;right:-10%;width:200px;height:200px;background:radial-gradient(circle,rgba(42,123,111,0.15),transparent 70%);pointer-events:none;">
+        </div>
+        <h4 style="font-family:'Instrument Serif',serif;font-size:20px;margin-bottom:18px;position:relative;">🔗 How
+          Everything Connects</h4>
+        <div style="font-family:'Geist Mono',monospace;font-size:13px;line-height:2.2;position:relative;">
+          <span style="color:#6EE7B7;font-weight:700;">leaders</span> <span style="color:rgba(255,255,255,0.25);">(your
+            existing table)</span><br>
+          &nbsp;&nbsp;├── <span style="color:#93C5FD;">leaderId</span> ←── <span
+            style="color:#FCA5A5;font-weight:700;">bookings</span><br>
+          &nbsp;&nbsp;└── <span style="color:#93C5FD;">leaderId</span> ←── <span
+            style="color:#FBBF24;font-weight:700;">leader_availability_approvals</span><br>
+          <br>
+          <span style="color:#6EE7B7;font-weight:700;">tag_slug</span> <span style="color:rgba(255,255,255,0.25);">(your
+            existing table)</span><br>
+          &nbsp;&nbsp;├── <span style="color:#93C5FD;">slug</span> ←──── <span
+            style="color:#FCA5A5;font-weight:700;">bookings</span>.slug<br>
+          &nbsp;&nbsp;└── <span style="color:#93C5FD;">slug</span> ←──── <span
+            style="color:#FBBF24;font-weight:700;">leader_availability_approvals</span>.slug
+        </div>
+      </div>
+
+      <!-- Status lifecycle -->
+      <div style="margin-top:24px;">
+        <div class="card-grid">
+          <div class="mini-card">
+            <div class="mini-card-icon">📋</div>
+            <h4>Booking Status Flow</h4>
+            <p style="font-family:'Geist Mono',monospace;font-size:12px;line-height:2;">
+              <code>pending</code> → slot locked<br>
+              <code>paid</code> → payment confirmed<br>
+              <code>live</code> → session in progress<br>
+              <code>completed</code> → session done<br>
+              <code>missed</code> → user no-show<br>
+              <code>cancelled</code> → refund issued
+            </p>
+          </div>
+          <div class="mini-card">
+            <div class="mini-card-icon">🛡️</div>
+            <h4>Approval Status Flow</h4>
+            <p style="font-family:'Geist Mono',monospace;font-size:12px;line-height:2;">
+              <code>pending</code> → leader submitted<br>
+              <code>approved</code> → ops approved, live on app<br>
+              <code>rejected</code> → reason shown to leader<br>
+              <code>cancelled</code> → leader withdrew request
+            </p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Status lifecycle -->
-    <div style="margin-top:24px;">
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION 7: CONVERSION UX -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="section" id="conversion">
+      <div class="section-header">
+        <div class="section-number">06 — HIGH CONVERSION</div>
+        <div class="section-title">UX Triggers That Drive Bookings</div>
+        <div class="section-subtitle">Psychological nudges that turn browsers into paying users.</div>
+      </div>
+
       <div class="card-grid">
         <div class="mini-card">
-          <div class="mini-card-icon">📋</div>
-          <h4>Booking Status Flow</h4>
-          <p style="font-family:'Geist Mono',monospace;font-size:12px;line-height:2;">
-            <code>pending</code> → slot locked<br>
-            <code>paid</code> → payment confirmed<br>
-            <code>live</code> → session in progress<br>
-            <code>completed</code> → session done<br>
-            <code>missed</code> → user no-show<br>
-            <code>cancelled</code> → refund issued
-          </p>
+          <div class="mini-card-icon">⏳</div>
+          <h4>Urgency</h4>
+          <p>"Only 2 slots left today" — real-time count of remaining slots. FOMO drives faster decisions.</p>
         </div>
         <div class="mini-card">
-          <div class="mini-card-icon">🛡️</div>
-          <h4>Approval Status Flow</h4>
-          <p style="font-family:'Geist Mono',monospace;font-size:12px;line-height:2;">
-            <code>pending</code> → leader submitted<br>
-            <code>approved</code> → ops approved, live on app<br>
-            <code>rejected</code> → reason shown to leader<br>
-            <code>cancelled</code> → leader withdrew request
+          <div class="mini-card-icon">⭐</div>
+          <h4>Social Proof</h4>
+          <p>"4.8 ★ · 1,200 sessions completed" — session count is more convincing than reviews alone.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-icon">💬</div>
+          <h4>Emotional Hook</h4>
+          <p>"Feeling confused? Talk to Swati Ji now 🔮" — address the emotion, not the service.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-icon">⚡</div>
+          <h4>Speed Promise</h4>
+          <p>"⚡ Talk in 2 minutes" — instant gratification. The faster the promise, the higher the conversion.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-icon">🎁</div>
+          <h4>First Session Offer</h4>
+          <p>"First 5 min FREE" or "₹99 intro session" — reduce risk for new users to try the platform.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-icon">🔁</div>
+          <h4>Post-Session Rebook</h4>
+          <p>Right after session ends, show "Book again with Swati Ji — 10% off". Capture while satisfaction is peak.
           </p>
         </div>
       </div>
     </div>
-  </div>
 
-  <hr class="divider">
-
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- SECTION 7: CONVERSION UX -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div class="section" id="conversion">
-    <div class="section-header">
-      <div class="section-number">07 — HIGH CONVERSION</div>
-      <div class="section-title">UX Triggers That Drive Bookings</div>
-      <div class="section-subtitle">Psychological nudges that turn browsers into paying users.</div>
-    </div>
-
-    <div class="card-grid">
-      <div class="mini-card">
-        <div class="mini-card-icon">⏳</div>
-        <h4>Urgency</h4>
-        <p>"Only 2 slots left today" — real-time count of remaining slots. FOMO drives faster decisions.</p>
-      </div>
-      <div class="mini-card">
-        <div class="mini-card-icon">⭐</div>
-        <h4>Social Proof</h4>
-        <p>"4.8 ★ · 1,200 sessions completed" — session count is more convincing than reviews alone.</p>
-      </div>
-      <div class="mini-card">
-        <div class="mini-card-icon">💬</div>
-        <h4>Emotional Hook</h4>
-        <p>"Feeling confused? Talk to Swati Ji now 🔮" — address the emotion, not the service.</p>
-      </div>
-      <div class="mini-card">
-        <div class="mini-card-icon">⚡</div>
-        <h4>Speed Promise</h4>
-        <p>"⚡ Talk in 2 minutes" — instant gratification. The faster the promise, the higher the conversion.</p>
-      </div>
-      <div class="mini-card">
-        <div class="mini-card-icon">🎁</div>
-        <h4>First Session Offer</h4>
-        <p>"First 5 min FREE" or "₹99 intro session" — reduce risk for new users to try the platform.</p>
-      </div>
-      <div class="mini-card">
-        <div class="mini-card-icon">🔁</div>
-        <h4>Post-Session Rebook</h4>
-        <p>Right after session ends, show "Book again with Swati Ji — 10% off". Capture while satisfaction is peak.</p>
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SUMMARY BANNER -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="summary-banner">
+      <h3>✦ The Complete Flow at a Glance</h3>
+      <div class="summary-steps">
+        <span class="summary-pill">🔍 Browse Leaders</span>
+        <span class="summary-arrow">→</span>
+        <span class="summary-pill">⚡ Talk Now</span>
+        <span class="summary-arrow">→</span>
+        <span class="summary-pill">🕐 Select Slot</span>
+        <span class="summary-arrow">→</span>
+        <span class="summary-pill">🔒 Slot Locked (5m)</span>
+        <span class="summary-arrow">→</span>
+        <span class="summary-pill">💳 Pay & Confirm</span>
+        <span class="summary-arrow">→</span>
+        <span class="summary-pill">✅ Confirmed</span>
+        <span class="summary-arrow">→</span>
+        <span class="summary-pill">📹 Join Session</span>
       </div>
     </div>
+
   </div>
 
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- SUMMARY BANNER -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div class="summary-banner">
-    <h3>✦ The Complete Flow at a Glance</h3>
-    <div class="summary-steps">
-      <span class="summary-pill">🔍 Browse Leaders</span>
-      <span class="summary-arrow">→</span>
-      <span class="summary-pill">⚡ Talk Now</span>
-      <span class="summary-arrow">→</span>
-      <span class="summary-pill">🕐 Select Slot</span>
-      <span class="summary-arrow">→</span>
-      <span class="summary-pill">🔒 Slot Locked (5m)</span>
-      <span class="summary-arrow">→</span>
-      <span class="summary-pill">💳 Pay ₹999</span>
-      <span class="summary-arrow">→</span>
-      <span class="summary-pill">✅ Confirmed</span>
-      <span class="summary-arrow">→</span>
-      <span class="summary-pill">📹 Join Session</span>
-    </div>
-  </div>
+  <script>
+    // Smooth scroll + active tab tracking
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 
-</div>
+    const sections = document.querySelectorAll('.section');
+    const tabs = document.querySelectorAll('.nav-tab');
 
-<script>
-  // Smooth scroll + active tab tracking
-  function scrollToSection(id) {
-    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tabs.forEach(t => t.classList.remove('active'));
+          const idx = Array.from(sections).indexOf(entry.target);
+          if (tabs[idx]) tabs[idx].classList.add('active');
+        }
+      });
+    }, { rootMargin: '-100px 0px -60% 0px', threshold: 0 });
 
-  const sections = document.querySelectorAll('.section');
-  const tabs = document.querySelectorAll('.nav-tab');
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        tabs.forEach(t => t.classList.remove('active'));
-        const idx = Array.from(sections).indexOf(entry.target);
-        if (tabs[idx]) tabs[idx].classList.add('active');
-      }
-    });
-  }, { rootMargin: '-100px 0px -60% 0px', threshold: 0 });
-
-  sections.forEach(s => observer.observe(s));
-</script>
+    sections.forEach(s => observer.observe(s));
+  </script>
 
 </body>
+
 </html>
